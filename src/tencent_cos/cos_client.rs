@@ -78,6 +78,22 @@ impl Default for CosConfig {
 }
 
 impl CosConfig {
+    /// 创建一个用于临时凭证的简化配置
+    pub fn with_temp_credentials(
+        region: String,
+        secret_id: String,
+        secret_key: String,
+        token: String,
+    ) -> Self {
+        let mut config = Self::default();
+        config.region = Some(region);
+        config.secret_id = Some(secret_id);
+        config.secret_key = Some(secret_key);
+        config.token = Some(token);
+        config.scheme = "https".to_string();
+        config
+    }
+
     #[allow(clippy::too_many_arguments)]
     pub fn new(
         appid: Option<String>,
