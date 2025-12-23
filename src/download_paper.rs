@@ -4,7 +4,7 @@ use scraper::{Html, Selector};
 use serde_json::Value;
 use std::fs;
 use std::path::Path;
-use tracing::{info, warn};
+use tracing::{debug, error, info, warn};
 
 /// 从页面下载试卷数据并生成 PDF
 pub async fn download_page(page: &chromiumoxide::Page) -> Result<QuestionPage> {
@@ -33,11 +33,16 @@ pub async fn download_page(page: &chromiumoxide::Page) -> Result<QuestionPage> {
         }
     "#;
 
+    debug!("开始提取页面元素数据");
     let elements_data: Value = page.evaluate(elements_data_js).await?.into_value()?;
+    debug!("成功获取页面元素数据");
 
     let elements_array = elements_data["elements"]
         .as_array()
-        .ok_or_else(|| anyhow!("无法获取 elements 数组"))?;
+        .ok_or_else(|| {
+            error!("无法获取 elements 数组");
+            anyhow!("无法获取 elements 数组")
+        })?;
 
     info!("找到 {} 个题目部分。", elements_array.len());
 
@@ -83,11 +88,14 @@ pub async fn download_page(page: &chromiumoxide::Page) -> Result<QuestionPage> {
         }
     "#;
 
+    debug!("正在提取试卷标题");
     let title_value: Value = page.evaluate(title_js).await?.into_value()?;
     let title: String = title_value.as_str().unwrap_or("未找到标题").to_string();
+    debug!("提取到的原始标题: {}", title);
 
     // 清理标题中的非法字符
     let title = sanitize_filename(&title);
+    debug!("清理后的标题: {}", title);
 
     // 提取信息（省份、年级）
     let info_js = r#"
@@ -103,10 +111,12 @@ pub async fn download_page(page: &chromiumoxide::Page) -> Result<QuestionPage> {
         }
     "#;
 
+    debug!("正在提取省份和年级信息");
     let info: Value = page.evaluate(info_js).await?.into_value()?;
 
     let province = info["shengfen"].as_str().unwrap_or("未找到").to_string();
     let grade = info["nianji"].as_str().unwrap_or("未找到").to_string();
+    debug!("省份: {}, 年级: {}", province, grade);
 
     // 提取科目
     let subject_js = r#"
@@ -116,8 +126,10 @@ pub async fn download_page(page: &chromiumoxide::Page) -> Result<QuestionPage> {
         }
     "#;
 
+    debug!("正在提取科目信息");
     let subject_value: Value = page.evaluate(subject_js).await?.into_value()?;
     let subject_text: String = subject_value.as_str().unwrap_or("未找到科目").to_string();
+    debug!("提取到的科目文本: {}", subject_text);
 
     let valid_subjects = [
         "语文", "数学", "英语", "物理", "化学", "生物", "历史", "政治", "地理", "科学",
@@ -129,24 +141,32 @@ pub async fn download_page(page: &chromiumoxide::Page) -> Result<QuestionPage> {
             break;
         }
     }
+    debug!("识别到的科目: {}", subject);
 
     // 从标题中提取年份
     let year = extract_year(&title);
+    debug!("提取到的年份: {}", year);
 
     // 生成 PDF
+    debug!("准备生成 PDF 文件");
     let pdf_dir = Path::new("PDF");
     if !pdf_dir.exists() {
+        debug!("PDF 目录不存在，正在创建");
         fs::create_dir_all(pdf_dir)?;
     }
 
     let pdf_path = format!("PDF/{}.pdf", title);
+    debug!("PDF 文件路径: {}", pdf_path);
 
     // 使用 chromiumoxide 的 PDF 功能
     // 注意：chromiumoxide 可能使用不同的 API，这里使用通用的方法
+    debug!("开始生成 PDF");
     if let Err(e) = generate_pdf(page, &pdf_path).await {
+        error!("生成 PDF 失败: {}，但继续处理数据", e);
         warn!("生成 PDF 失败: {}，但继续处理数据", e);
     } else {
         info!("已保存 PDF: {}", pdf_path);
+        debug!("PDF 生成成功");
     }
 
     Ok(QuestionPage {

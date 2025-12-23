@@ -10,7 +10,7 @@ use serde_json::{Value, json};
 use std::fs;
 use std::path::Path;
 use tokio::time::{Duration, timeout};
-use tracing::{debug, info, warn};
+use tracing::{debug, error, info, warn};
 use uuid::Uuid;
 
 // ============================================================================
@@ -241,11 +241,13 @@ async fn get_upload_credentials(
 
     if response.success && response.data.is_some() {
         info!("✅ 凭证获取成功。");
+        debug!("凭证数据: {:?}", response.data);
         Ok(response.data.unwrap())
     } else {
         let msg = response
             .message
             .unwrap_or_else(|| "Unknown error".to_string());
+        error!("❌ 错误: API响应格式不正确或未成功: {}", msg);
         warn!("❌ 错误: API响应格式不正确或未成功: {}", msg);
         Err(anyhow!("Failed to get credentials: {}", msg))
     }
@@ -280,11 +282,22 @@ async fn upload_to_cos(credentials_data: CredentialData, file_path: &Path) -> Re
     debug!("清理后文件名: {:?}", filename);
     debug!("云端路径 (Key): {}", object_key);
 
-    client.upload_file(bucket, file_path, &object_key).await?;
+    debug!(
+        "开始上传文件到 COS，bucket: {}, key: {}",
+        bucket, object_key
+    );
+    client
+        .upload_file(bucket, file_path, &object_key)
+        .await
+        .map_err(|e| {
+            error!("文件上传到 COS 失败: {}", e);
+            e
+        })?;
 
     let final_url = format!("https://{}/{}", credentials_data.cdn_domain, object_key);
     info!("✅ 文件上传成功。");
     info!("最终文件URL: {}", final_url);
+    debug!("文件上传完成，URL: {}", final_url);
 
     Ok(FileInfo {
         url: final_url,
@@ -314,8 +327,12 @@ async fn notify_application_server(
     )
     .await?;
 
-    let response: NotifyResponse = serde_json::from_value(response_value)?;
+    let response: NotifyResponse = serde_json::from_value(response_value).map_err(|e| {
+        error!("解析通知响应失败: {}", e);
+        anyhow!("解析通知响应失败: {}", e)
+    })?;
     info!("✅ 服务器通知成功，已收到返回数据。");
+    debug!("通知响应: {:?}", response);
     Ok(response)
 }
 
@@ -338,9 +355,11 @@ async fn upload_pdf(page: &chromiumoxide::Page, file_path: &Path) -> Result<Opti
         let data_array = &notify_response.data.unwrap();
         info!("{}", "=".repeat(50));
         info!("🎉 成功获取到目标 `data` 数组! 🎉");
+        debug!("附件数据: {:?}", data_array);
         Ok(Some(data_array.clone()))
     } else {
         warn!("未能从最终响应中找到 'data' 数组。服务器返回内容如下:");
+        error!("上传流程完成但未获取到附件数据");
         debug!("{}", serde_json::to_string_pretty(&notify_response)?);
         Ok(None)
     }
@@ -413,8 +432,27 @@ async fn build_paper_payload(
     attachments: Option<Value>,
 ) -> Result<Value> {
     // 确定城市
-    let city_code =
-        determine_city_from_paper_name(&question_page.name, &question_page.province).await?;
+    debug!("开始确定城市信息");
+    let city_code = determine_city_from_paper_name(&question_page.name, &question_page.province)
+        .await
+        .map_err(|e| {
+            error!("确定城市失败: {}", e);
+            e
+        })?;
+    debug!("城市 code: {:?}", city_code);
+
+    debug!("构建试卷保存 payload");
+    // 先计算附件数量（在使用 attachments 之前）
+    let attachment_count = if let Some(att) = &attachments {
+        if let Some(arr) = att.as_array() {
+            arr.len()
+        } else {
+            0
+        }
+    } else {
+        0
+    };
+    debug!("附件数量: {}", attachment_count);
 
     let payload = json!({
         "paperType":"6215",
@@ -424,7 +462,7 @@ async fn build_paper_payload(
         "courseVersionCode": "",
         "address": [
         {
-            "province": crate::bank_page_info::address::get_province_code(&question_page.province).unwrap_or_else(||1).to_string(),
+            "province": crate::bank_page_info::address::get_province_code(&question_page.province).unwrap_or_else(||{warn!("can not get province code. using 1 by default");1}).to_string(),
             "city": city_code.unwrap_or(0).to_string() // 如果无法确定城市，使用 0
         }
         ],
@@ -439,6 +477,7 @@ async fn build_paper_payload(
         "paperId": "",
         "attachments": attachments.unwrap_or_else(|| json!([]))
     });
+    debug!("Payload 构建完成;");
 
     Ok(payload)
 }
@@ -482,16 +521,25 @@ pub async fn save_new_paper(
     )
     .await?;
 
-    let result: SavePaperResponse = serde_json::from_value(response_value)?;
+    let result: SavePaperResponse = serde_json::from_value(response_value).map_err(|e| {
+        error!("解析保存试卷响应失败: {}", e);
+        anyhow!("解析保存试卷响应失败: {}", e)
+    })?;
     debug!("API响应: {}", serde_json::to_string_pretty(&result)?);
 
     if result.success {
         if let Some(paper_id) = result.data {
             info!("✅ 成功! 获取到的paper_id: {}", paper_id);
+            debug!("试卷保存成功，paper_id: {}", paper_id);
             question_page.page_id = Some(paper_id.clone());
-            save_paper_to_toml(question_page)?;
+            save_paper_to_toml(question_page).map_err(|e| {
+                error!("保存 TOML 文件失败: {}", e);
+                e
+            })?;
+            debug!("TOML 文件保存成功");
             Ok(Some(paper_id))
         } else {
+            error!("❌ API 返回成功但未包含 paper_id");
             warn!("❌ API 返回成功但未包含 paper_id");
             Ok(None)
         }
@@ -499,6 +547,7 @@ pub async fn save_new_paper(
         let msg = result
             .message
             .unwrap_or_else(|| "Unknown error".to_string());
+        error!("❌ save failed: {}", msg);
         warn!("❌ save failed: {}", msg);
         Ok(None)
     }

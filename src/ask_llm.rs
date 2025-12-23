@@ -1,6 +1,6 @@
 use openai::chat::{ChatCompletion, ChatCompletionMessage, ChatCompletionMessageRole};
 use openai::Credentials;
-use tracing::info;
+use tracing::{debug, info, warn};
 
 // LLM 配置
 const API_KEY: &str = "26e96c4d312e48feacbd78b7c42bd71e";
@@ -49,8 +49,10 @@ pub async fn resolve_city_with_llm(
     }
     
     info!("使用 LLM 裁决城市，试卷名称: {}, 候选城市数量: {}", paper_name, matched_cities.len());
+    debug!("候选城市列表: {:?}", matched_cities);
     
     let prompt = build_city_resolution_prompt(paper_name, province, matched_cities);
+    debug!("LLM Prompt: {}", prompt);
     
     let credentials = Credentials::new(API_KEY, API_BASE_URL);
     
@@ -73,11 +75,16 @@ pub async fn resolve_city_with_llm(
         },
     ];
 
+    debug!("正在调用 LLM API，模型: {}", MODEL_NAME);
     let chat_completion = ChatCompletion::builder(MODEL_NAME, messages)
         .credentials(credentials)
         .create()
         .await
-        .map_err(|e| anyhow::anyhow!("LLM API 调用失败: {}", e))?;
+        .map_err(|e| {
+            warn!("LLM API 调用失败: {}", e);
+            anyhow::anyhow!("LLM API 调用失败: {}", e)
+        })?;
+    debug!("LLM API 调用成功");
 
     let returned_message = chat_completion
         .choices

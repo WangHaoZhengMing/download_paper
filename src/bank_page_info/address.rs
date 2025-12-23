@@ -495,8 +495,39 @@ static PROVINCE_CITY_MAP: phf::Map<&'static str, phf::Map<&'static str, i16>> = 
 
 
 /// 获取省份code
+/// 支持带"省"或不带"省"的匹配，例如："浙江省" 或 "浙江"
 pub fn get_province_code(province_name: &str) -> Option<i16> {
-    PROVINCE_MAP.get(province_name).copied()
+    // 先尝试直接匹配
+    if let Some(code) = PROVINCE_MAP.get(province_name).copied() {
+        return Some(code);
+    }
+    
+    // 如果没找到，尝试添加"省"字后匹配
+    let with_suffix = format!("{}省", province_name);
+    if let Some(code) = PROVINCE_MAP.get(&with_suffix).copied() {
+        return Some(code);
+    }
+    
+    // 如果还是没找到，尝试去掉"省"字后匹配
+    let without_suffix = province_name.trim_end_matches("省");
+    if without_suffix != province_name {
+        if let Some(code) = PROVINCE_MAP.get(without_suffix).copied() {
+            return Some(code);
+        }
+    }
+    
+    // 特殊处理：自治区、直辖市等
+    let variants = vec![
+        format!("{}自治区", province_name),
+        format!("{}市", province_name),
+    ];
+    for variant in variants {
+        if let Some(code) = PROVINCE_MAP.get(&variant).copied() {
+            return Some(code);
+        }
+    }
+    
+    None
 }
 
 /// 获取城市code
@@ -504,19 +535,58 @@ pub fn get_province_code(province_name: &str) -> Option<i16> {
 /// 逻辑：
 /// 1. 如果提供了 province_name，先尝试在该省份下查找
 /// 2. 如果没提供 province_name，或者在指定省份下没找到，则在所有省份下查找
+/// 支持带"市"或不带"市"的匹配，例如："杭州市" 或 "杭州"
 pub fn get_city_code(province_name: Option<&str>, city_name: &str) -> Option<i16> {
+    // 辅助函数：尝试匹配城市（支持带/不带"市"）
+    let try_match_city = |city_map: &phf::Map<&str, i16>, name: &str| -> Option<i16> {
+        // 先尝试直接匹配
+        if let Some(code) = city_map.get(name).copied() {
+            return Some(code);
+        }
+        // 尝试添加"市"字
+        let with_suffix = format!("{}市", name);
+        if let Some(code) = city_map.get(&with_suffix).copied() {
+            return Some(code);
+        }
+        // 尝试去掉"市"字
+        let without_suffix = name.trim_end_matches("市");
+        if without_suffix != name {
+            if let Some(code) = city_map.get(without_suffix).copied() {
+                return Some(code);
+            }
+        }
+        None
+    };
+    
     // 1. 尝试在指定省份查找
     if let Some(prov) = province_name {
+        // 先尝试直接匹配省份名
         if let Some(city_map) = PROVINCE_CITY_MAP.get(prov) {
-            if let Some(code) = city_map.get(city_name).copied() {
+            if let Some(code) = try_match_city(city_map, city_name) {
                 return Some(code);
+            }
+        }
+        // 如果省份名不带"省"，尝试添加"省"字
+        let prov_with_suffix = format!("{}省", prov);
+        if let Some(city_map) = PROVINCE_CITY_MAP.get(&prov_with_suffix) {
+            if let Some(code) = try_match_city(city_map, city_name) {
+                return Some(code);
+            }
+        }
+        // 如果省份名带"省"，尝试去掉"省"字
+        let prov_without_suffix = prov.trim_end_matches("省");
+        if prov_without_suffix != prov {
+            if let Some(city_map) = PROVINCE_CITY_MAP.get(prov_without_suffix) {
+                if let Some(code) = try_match_city(city_map, city_name) {
+                    return Some(code);
+                }
             }
         }
     }
 
     // 2. 全局查找（fallback）
     for (_, city_map) in PROVINCE_CITY_MAP.entries() {
-        if let Some(code) = city_map.get(city_name).copied() {
+        if let Some(code) = try_match_city(city_map, city_name) {
             return Some(code);
         }
     }

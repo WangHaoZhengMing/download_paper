@@ -1,4 +1,5 @@
 use serde::{Deserialize, Serialize};
+use tracing::{debug, warn};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Question {
@@ -83,9 +84,9 @@ impl MutiThreadConfig {
         zujvanwang_catalogue_url: String,
         page: &chromiumoxide::Page,
     ) -> anyhow::Result<Self> {
-        use tracing::warn;
         use serde_json::Value;
 
+        debug!("开始创建 MutiThreadConfig");
         let js_code = r#"
             () => {
                 const elements = document.querySelectorAll("div.info-item.exam-info a.exam-name");
@@ -101,12 +102,18 @@ impl MutiThreadConfig {
             .await?
             .into_value()?;
 
-        let zujvanwang_papers: Vec<PaperInfo> = serde_json::from_value(response)?;
+        let zujvanwang_papers: Vec<PaperInfo> = serde_json::from_value(response)
+            .map_err(|e| {
+                warn!("解析试卷列表失败: {}", e);
+                e
+            })?;
+        debug!("成功解析到 {} 个试卷", zujvanwang_papers.len());
 
         if zujvanwang_papers.is_empty() {
             warn!("Warning: Could not find any question URLs on the catalogue page.");
         }
 
+        debug!("MutiThreadConfig 创建成功");
         Ok(Self {
             ports,
             zujvanwang_catalogue_url,
