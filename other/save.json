@@ -1,8 +1,8 @@
 {
     "paperType": "3626",
     "parentPaperType": "ppt3",
-    //"schNumber": "65",
-    //"schName": "集团",
+    "schNumber": "65",
+    "schName": "集团",
     "schoolYearBegin": 2025,
     "schoolYearEnd": 2026,
     "paperYear": 2025,

@@ -261,6 +261,7 @@ impl FromStr for Subject {
 
 /// 试卷大类（父类型）
 /// 建议将这些字符串常量也封装起来，防止拼写错误
+#[derive(serde::Serialize)]
 pub enum PaperCategory {
     ZhongKaoZhuanTi,   // 中考专题
     KuaXueDuan,        // 跨学段衔接
@@ -279,6 +280,21 @@ impl PaperCategory {
             "新东方自研" => Some("ppt4"),
             "竞赛" => Some("ppt5"),
             _ => None,
+        }
+    }
+}
+
+impl FromStr for PaperCategory {
+    type Err = ();
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "中考专题" => Ok(Self::ZhongKaoZhuanTi),
+            "跨学段衔接" => Ok(Self::KuaXueDuan),
+            "阶段测试" => Ok(Self::JieDuanCeShi),
+            "新东方自研" => Ok(Self::ZiYan),
+            "竞赛" => Ok(Self::JingSai),
+            _ => Err(()),
         }
     }
 }

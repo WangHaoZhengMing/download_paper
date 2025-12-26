@@ -1,14 +1,16 @@
 use crate::ask_llm::{ask_llm, ask_llm_with_config, resolve_city_with_llm};
 use crate::bank_page_info::address::{get_city_code, match_cities_from_paper_name};
 use crate::bank_page_info::grade::find_grade_code;
+use crate::bank_page_info::paper_type::PaperCategory;
 use crate::bank_page_info::subject::find_subject_code;
 use crate::model::QuestionPage;
 use crate::tencent_cos::{CosConfig, CosS3Client};
-use anyhow::{Result, anyhow};
+use anyhow::{Context, Result, anyhow};
 use serde::{Deserialize, Serialize};
 use serde_json::{Value, json};
 use std::fs;
 use std::path::Path;
+use std::str::FromStr;
 use tokio::time::{Duration, timeout};
 use tracing::{debug, error, info, warn};
 use uuid::Uuid;
@@ -110,8 +112,6 @@ fn get_filename(file_path: &Path) -> Result<&str> {
         .and_then(|n| n.to_str())
         .ok_or_else(|| anyhow!("Invalid filename"))
 }
-
-
 
 /// 阶段1: 获取上传凭证
 async fn get_upload_credentials(
@@ -346,74 +346,88 @@ async fn build_paper_payload(
         0
     };
     debug!("附件数量: {}", attachment_count);
-    struct MiscByAi{
+    #[derive(Debug, Clone, Deserialize)]
+    struct MiscByAi {
         paper_type_name: String,
-        school_year_begin: String,
-        school_year_end: String,
+        school_year_begin: i32,
+        school_year_end: i32,
         paper_term: Option<String>,
         paper_month: Option<i16>,
-
-        
+        parent_paper_type: String,
     }
-    let user_message = "";
     let user_message = format!(
-        r#"你是一个专业的教务数据分析助手。请根据试卷名称 "{}" 分析并提取以下元数据。
-        请返回一个纯 JSON 对象，不要包含 markdown 格式标记（如 ```json ... ```）。
+        r#"你是一个专业的教务数据分析助手。请根据试卷名称 "{}" 分析并提取元数据。
 
-        字段说明：
-        1. paper_type_name: 试卷类型名称。你只可以从以下选项中选择一个最合适的类型：
-                            中考真题
-                            中考模拟
-                            学业考试
-                            自主招生
-                            小初衔接
-                            初高衔接
-                            期中考试
-                            期末考试
-                            单元测试
-                            开学考试
-                            月考
-                            周测
-                            课堂闭环
-                            阶段测试
-                            教材
-                            教辅
-                            竞赛。
-        2. school_year_begin: 学年开始年份（字符串）。例如 "2023"。
-        3. school_year_end: 学年结束年份（字符串）。例如 "2024"。
-            - 如果标题包含 "2023-2024"，则 begin="2023", end="2024"。
-            - 如果标题仅有 "2024年" 且为下学期（春季），通常属于 2023-2024 学年。
-            - 如果标题仅有 "2024年" 且为上学期（秋季），通常属于 2024-2025 学年。
-        4. paper_term: 学期（整数）。1 代表上学期（秋季），2 代表下学期（春季）。
-        5. paper_month: 考试月份（整数）。请根据试卷类型和学期推断最可能的月份。
-        - 上学期期中约11月，期末约1月。
-        - 下学期期中约4月，期末约6-7月。
+请严格遵守以下规则，返回一个纯 JSON 对象，不要包含 markdown 格式标记（如 ```json ... ```）。
 
-        JSON 格式示例：
-        {{
-        "paper_type_name": "中考真题",
-        "school_year_begin": "2023",
-        "school_year_end": "2024",
-        "paper_term": "1",
-        "paper_month": 1
-        }}
-        "#,
+### 字段定义与约束：
+
+1. **paper_type_name** (String): 试卷类型。必须从以下列表中选择最合适的一个：
+   - 中考真题, 中考模拟, 学业考试, 自主招生
+   - 小初衔接, 初高衔接
+   - 期中考试, 期末考试, 单元测试, 开学考试, 月考, 周测, 课堂闭环, 阶段测试
+   - 教材, 教辅
+   - 竞赛
+
+2. **parent_paper_type** (String): 试卷大类。请根据你选择的 `paper_type_name`，按照以下映射关系自动填充：
+   - 若类型为 [中考真题, 中考模拟, 学业考试, 自主招生] -> 归类为 "中考专题"
+   - 若类型为 [小初衔接, 初高衔接] -> 归类为 "跨学段衔接"
+   - 若类型为 [期中考试, 期末考试, 单元测试, 开学考试, 月考, 周测, 课堂闭环, 阶段测试] -> 归类为 "阶段测试"
+   - 若类型为 [教材, 教辅] -> 归类为 "新东方自研"
+   - 若类型为 [竞赛] -> 归类为 "竞赛"
+
+3. **school_year_begin** (i32): 学年开始年份。例如 2023。
+4. **school_year_end** (i32): 学年结束年份。例如 2024。
+   - 逻辑参考：
+     - 2023-2024 -> begin=2023, end=2024
+     - 2024年下学期(春季) -> 属于 2023-2024 学年 -> begin=2023, end=2024
+     - 2024年上学期(秋季) -> 属于 2024-2025 学年 -> begin=2024, end=2025
+
+5. **paper_term** (String): 学期。**注意：必须返回字符串类型的数字**。
+   - "1" 代表上学期（秋季）
+   - "2" 代表下学期（春季）
+   - 如果无法判断，返回 null
+
+6. **paper_month** (Integer): 考试月份。**注意：必须返回整数**。
+   - 上学期(1): 期中约11月, 期末约1月, 开学约9月, 月考按实际推算。
+   - 下学期(2): 期中约4月, 期末约6月或7月, 开学约2月。
+
+### JSON 返回示例：
+{{
+  "paper_type_name": "期中考试",
+  "parent_paper_type": "阶段测试",
+  "school_year_begin": 2023,
+  "school_year_end": 2024,
+  "paper_term": "2", 
+  "paper_month": 4
+}}
+"#,
         question_page.name
     );
 
-    ask_llm(&user_message);
+    let llm_json_response = ask_llm(&user_message).await?;
+    let parsed_data: MiscByAi = serde_json::from_str(&llm_json_response)
+        .with_context(|| format!("LLM 返回的 JSON 解析失败，原始内容：{}", llm_json_response))?;
+    debug!(
+        "解析成功：\n试卷类型：{}\n学年：{}-{}\n学期：{:?}\n月份：{:?}",
+        parsed_data.paper_type_name,
+        parsed_data.school_year_begin,
+        parsed_data.school_year_end,
+        parsed_data.paper_term,
+        parsed_data.paper_month
+    );
 
     let payload = json!({
-        "paperType":crate::bank_page_info::paper_type::get_subtype_value_by_name(&question_page.subject,subtype_name),
-        "parentPaperType": "ppt4",
+        "paperType":crate::bank_page_info::paper_type::get_subtype_value_by_name(&question_page.subject,&parsed_data.paper_type_name),
+        "parentPaperType": PaperCategory::get_value(&parsed_data.parent_paper_type).unwrap_or_else(||{warn!("Not found parentPaperType, using default"); "ppt1"}),
         "schName": "集团",
         "schNumber": "65",
-        
-        "schoolYearBegin": "{}",//to deter
-        "schoolYearEnd": "{}",//to deter
-        "paperTerm": "1",//to deter
-        "paperMonth": 9,//to deter
-        "paperYear": String::from(&question_page.year),
+
+        "schoolYearBegin": parsed_data.school_year_begin,
+        "schoolYearEnd": parsed_data.school_year_end,
+        "paperTerm": parsed_data.paper_term.unwrap_or_else(||{warn!("not found paper_term, using 1 by default");"1".to_string()}),//to deter
+        "paperMonth": parsed_data.paper_month.unwrap_or_else(||{warn!("not fond month, using 2024 by defaulf");2024}),//to deter
+        "paperYear": question_page.year.parse::<i32>().unwrap_or_else(|_|{warn!("Can not parse year, using 2024 by default"); 2024}),
         "courseVersionCode": "",
         "address": [
         {
@@ -427,8 +441,8 @@ async fn build_paper_payload(
         "subject": find_subject_code(&question_page.subject).unwrap().to_string(),
         "subjectName": &question_page.subject,
         "gradeName": &question_page.grade,
-        "grade": find_grade_code(&question_page.grade),
-        
+        "grade": find_grade_code(&question_page.grade).unwrap_or_else(||{warn!("Can not infer grade or find. Using 161 default"); 161}).to_string(),
+
         "paperId": "",
         "attachments": attachments.unwrap_or_else(|| json!([]))
     });
@@ -455,13 +469,13 @@ pub async fn save_new_paper(
     // 上传 PDF 文件
     let pdf_path = format!("{}/{}.pdf", PDF_DIR, question_page.name);
     let attachments = upload_pdf(tiku_page, Path::new(&pdf_path)).await?;
-    info!("attachments are:{:?}", &attachments);
+    debug!("attachments are:{:?}", &attachments);
 
     // 构建保存试卷的 payload
     let payload = build_paper_payload(question_page, attachments).await?;
     let payload_json = serde_json::to_string(&payload)?;
     debug!("发送的payload: {}", payload_json);
-    debug!(
+    info!(
         "Payload 详细内容: {}",
         serde_json::to_string_pretty(&payload)?
     );
@@ -506,8 +520,6 @@ pub async fn save_new_paper(
         Ok(None)
     }
 }
-
-
 
 /// 生成获取上传凭证的 JavaScript 代码
 fn build_credential_request_js() -> String {
@@ -592,7 +604,7 @@ fn build_save_paper_js() -> String {
                     headers: {{
                         "Content-Type": "application/json",
                         "Accept": "application/json, text/plain, */*",
-                        "tikutoken": "732FD8402F95087CD934374135C46EE5" 
+                        "tikutoken": "732FD8402F95087CD934374135C46EE5"
                     }},
                     credentials: "include",
                     body: payload
