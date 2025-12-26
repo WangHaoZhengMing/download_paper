@@ -24,11 +24,45 @@ pub async fn download_page(page: &chromiumoxide::Page) -> Result<QuestionPage> {
                 })
                 .join('\n');
             
-            // Get all sec-list elements
-            const sections = Array.from(document.querySelectorAll('.sec-list'));
+            // Find the container that holds both sec-title and sec-list
+            // Usually they are in a common parent like .sec-item or .paper-content
+            const container = document.querySelector('.sec-item') || 
+                            document.querySelector('.paper-content') || 
+                            document.querySelector('body');
+            
+            if (!container) {
+                return { styles: styles, elements: [] };
+            }
+            
+            // Get all sec-title and sec-list elements in DOM order
+            const allElements = Array.from(container.querySelectorAll('.sec-title, .sec-list'));
+            const elements = [];
+            
+            allElements.forEach(el => {
+                if (el.classList.contains('sec-title')) {
+                    // Extract title text from span
+                    const span = el.querySelector('span');
+                    const titleText = span ? span.innerText.trim() : '';
+                    if (titleText) {
+                        elements.push({
+                            type: 'title',
+                            title: titleText,
+                            content: ''
+                        });
+                    }
+                } else if (el.classList.contains('sec-list')) {
+                    // Extract sec-list content
+                    elements.push({
+                        type: 'content',
+                        title: '',
+                        content: el.outerHTML
+                    });
+                }
+            });
+            
             return {
                 styles: styles,
-                elements: sections.map(el => el.outerHTML)
+                elements: elements
             };
         }
     "#;
@@ -48,34 +82,85 @@ pub async fn download_page(page: &chromiumoxide::Page) -> Result<QuestionPage> {
 
     // 解析题目数据
     let mut questions = Vec::new();
-    for element_html in elements_array {
-        if let Some(html_str) = element_html.as_str() {
+    for element_obj in elements_array {
+        let element_type = element_obj["type"]
+            .as_str()
+            .unwrap_or("");
+
+        if element_type == "title" {
+            // 处理标题
+            let title = element_obj["title"]
+                .as_str()
+                .unwrap_or("")
+                .to_string();
+            if !title.is_empty() {
+                debug!("处理章节: {}", title);
+                questions.push(Question {
+                    origin: String::new(),
+                    stem: title,
+                    origin_from_our_bank: vec![],
+                    is_title: true,
+                    imgs: None,
+                });
+            }
+        } else if element_type == "content" {
+            // 处理题目内容
+            let html_str = element_obj["content"]
+                .as_str()
+                .ok_or_else(|| {
+                    error!("无法获取 content 字段");
+                    anyhow!("无法获取 content 字段")
+                })?;
+
             let document = Html::parse_document(html_str);
 
-            // 查找 exam-item__cnt
+            // 查找 exam-item__cnt（可能有多道题目）
             let exam_item_selector =
                 Selector::parse(".exam-item__cnt").map_err(|e| anyhow!("选择器解析失败: {}", e))?;
             let origin_selector =
                 Selector::parse("a.ques-src").map_err(|e| anyhow!("选择器解析失败: {}", e))?;
 
-            let stem = document
-                .select(&exam_item_selector)
-                .next()
-                .map(|el| el.text().collect::<String>().trim().to_string())
-                .unwrap_or_else(|| "未找到题目".to_string());
+            // 处理该 sec-list 中的所有题目
+            for exam_item in document.select(&exam_item_selector) {
+                // 提取文本内容作为 stem
+                let stem = exam_item
+                    .text()
+                    .collect::<String>()
+                    .trim()
+                    .to_string();
 
-            let origin = document
-                .select(&origin_selector)
-                .next()
-                .map(|el| el.text().collect::<String>().trim().to_string())
-                .unwrap_or_else(|| "未找到来源".to_string());
+                // 提取图片 - 直接在 exam_item 中查找
+                let img_selector = Selector::parse("img").map_err(|e| anyhow!("图片选择器解析失败: {}", e))?;
+                let mut imgs = Vec::new();
+                for img in exam_item.select(&img_selector) {
+                    if let Some(src) = img.value().attr("src") {
+                        imgs.push(src.to_string());
+                    }
+                    // 也检查 data-src（懒加载图片）
+                    if let Some(data_src) = img.value().attr("data-src") {
+                        if !imgs.contains(&data_src.to_string()) {
+                            imgs.push(data_src.to_string());
+                        }
+                    }
+                }
 
-            if !stem.is_empty() && stem != "未找到题目" {
-                questions.push(Question {
-                    origin,
-                    stem,
-                    origin_from_our_bank: vec![],
-                });
+                // 查找对应的来源（先在该题目区域内查找，如果找不到则在整文档中查找）
+                let origin = exam_item
+                    .select(&origin_selector)
+                    .next()
+                    .or_else(|| document.select(&origin_selector).next())
+                    .map(|el| el.text().collect::<String>().trim().to_string())
+                    .unwrap_or_else(|| "未找到来源".to_string());
+
+                if !stem.is_empty() && stem != "未找到题目" {
+                    questions.push(Question {
+                        origin,
+                        stem,
+                        origin_from_our_bank: vec![],
+                        is_title: false,
+                        imgs: if imgs.is_empty() { None } else { Some(imgs) },
+                    });
+                }
             }
         }
     }
@@ -217,15 +302,66 @@ async fn generate_pdf(page: &chromiumoxide::Page, path: &str) -> Result<()> {
     use chromiumoxide::cdp::browser_protocol::page::PrintToPdfParams;
     use std::path::Path;
 
-    // 创建默认的 PDF 参数
     let params = PrintToPdfParams::default();
 
-    // 使用 save_pdf 方法生成并保存 PDF
-    // 注意：生成 PDF 目前仅在 Chrome headless 模式下支持
     let pdf_path = Path::new(path);
     let _pdf_data = page.save_pdf(params, pdf_path).await?;
 
-    // save_pdf 已经将 PDF 保存到文件，并返回 PDF 数据
-    // 我们不需要额外操作，函数已经完成了保存
     Ok(())
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::connect_to_browser_and_page;
+    use crate::download_paper::download_page;
+    use tracing::info;
+    use std::fs;
+    use toml;
+
+    #[tokio::test]
+    async fn test_download_paper() {
+        // 初始化日志
+        crate::logger::init();
+
+        let debug_port = 2001;
+        let _total_success = 0;
+
+        info!("🚀 开始试卷下载流程...");
+        info!("🔌 浏览器端口: {}", debug_port);
+
+        // 连接到题库平台页面
+        let (browser, tiku_page) =
+            connect_to_browser_and_page(debug_port, Some("https://zujuan.xkw.com/26p2562957.html"), None)
+                .await
+                .expect("连接浏览器失败");
+
+        // 下载页面数据
+        let result = download_page(&tiku_page).await;
+        
+        match result {
+            Ok(paper) => {
+                // 将 paper 序列化为 TOML 格式
+                let toml_output = toml::to_string_pretty(&paper)
+                    .expect("序列化 paper 失败");
+                
+                // 写入文件
+                fs::write("papaer_debut_output.toml", toml_output)
+                    .expect("写入文件失败");
+                
+                info!("✅ 成功下载试卷: {}", paper.name);
+                info!("📄 试卷数据已保存到: papaer_debut_output.toml");
+            }
+            Err(e) => {
+                eprintln!("❌ 下载试卷失败: {}", e);
+                // 将错误信息也写入文件
+                let error_msg = format!("下载试卷失败: {}\n", e);
+                fs::write("papaer_debut_output.txt", error_msg)
+                    .expect("写入文件失败");
+            }
+        }
+
+        drop(browser);
+        info!("测试完成");
+    }
+}
+

@@ -1,0 +1,153 @@
+{
+  "paperType": [
+    {
+      "subject": "55",
+      "itemName": "中考专题",
+      "itemValue": "ppt1",
+      "itemIndex": 1,
+      "children": [
+        {
+          "subject": "55",
+          "itemName": "中考真题",
+          "itemValue": "3551",
+          "itemIndex": 1
+        },
+        {
+          "subject": "55",
+          "itemName": "中考模拟",
+          "itemValue": "3553",
+          "itemIndex": 3
+        },
+        {
+          "subject": "55",
+          "itemName": "学业考试",
+          "itemValue": "35515",
+          "itemIndex": 16
+        },
+        {
+          "subject": "55",
+          "itemName": "自主招生",
+          "itemValue": "3552",
+          "itemIndex": 2
+        }
+      ]
+    },
+    {
+      "subject": "55",
+      "itemName": "跨学段衔接",
+      "itemValue": "ppt2",
+      "itemIndex": 2,
+      "children": [
+        {
+          "subject": "55",
+          "itemName": "小初衔接",
+          "itemValue": "35516",
+          "itemIndex": 91
+        },
+        {
+          "subject": "55",
+          "itemName": "初高衔接",
+          "itemValue": "35513",
+          "itemIndex": 13
+        }
+      ]
+    },
+    {
+      "subject": "55",
+      "itemName": "阶段测试",
+      "itemValue": "ppt3",
+      "itemIndex": 3,
+      "children": [
+        {
+          "subject": "55",
+          "itemName": "期中考试",
+          "itemValue": "3556",
+          "itemIndex": 6
+        },
+        {
+          "subject": "55",
+          "itemName": "期末考试",
+          "itemValue": "3555",
+          "itemIndex": 5
+        },
+        {
+          "subject": "55",
+          "itemName": "单元测试",
+          "itemValue": "3559",
+          "itemIndex": 9
+        },
+        {
+          "subject": "55",
+          "itemName": "开学考试",
+          "itemValue": "3558",
+          "itemIndex": 8
+        },
+        {
+          "subject": "55",
+          "itemName": "月考",
+          "itemValue": "3557",
+          "itemIndex": 7
+        },
+        {
+          "subject": "55",
+          "itemName": "周测",
+          "itemValue": "5502",
+          "itemIndex": 90
+        },
+        {
+          "subject": "55",
+          "itemName": "课堂闭环",
+          "itemValue": "35514",
+          "itemIndex": 14
+        },
+        {
+          "subject": "55",
+          "itemName": "阶段测试",
+          "itemValue": "35510",
+          "itemIndex": 10
+        }
+      ]
+    },
+    {
+      "subject": "55",
+      "itemName": "新东方自研",
+      "itemValue": "ppt4",
+      "itemIndex": 4,
+      "children": [
+        {
+          "stage": "0",
+          "subject": "0",
+          "itemName": "自研",
+          "itemValue": "1",
+          "itemIndex": 21
+        },
+        {
+          "subject": "55",
+          "itemName": "教材",
+          "itemValue": "5514",
+          "itemIndex": 58
+        },
+        {
+          "subject": "55",
+          "itemName": "教辅",
+          "itemValue": "5515",
+          "itemIndex": 64
+        }
+      ]
+    },
+    {
+      "subject": "55",
+      "itemName": "竞赛",
+      "itemValue": "ppt5",
+      "itemIndex": 5,
+      "children": [
+        {
+          "subject": "55",
+          "itemName": "竞赛",
+          "itemValue": "35511",
+          "itemIndex": 11
+        }
+      ]
+    }
+  ]
+}

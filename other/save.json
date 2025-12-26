@@ -1,0 +1,41 @@
+{
+    "paperType": "3626",
+    "parentPaperType": "ppt3",
+    //"schNumber": "65",
+    //"schName": "集团",
+    "schoolYearBegin": 2025,
+    "schoolYearEnd": 2026,
+    "paperYear": 2025,
+    "paperTerm": "1",
+    "paperMonth": 9,
+    "courseVersionCode": "",
+    "address": [
+        {
+            "province": "21",
+            "city": "2107"
+        }
+    ],
+    "title": "2025~2026辽宁省锦州市七年级上学期期中考试语文试卷",
+    "stage": "3",
+    "subject": "62",
+    "subjectName": "科学",
+    "stageName": "初中",
+    "gradeName": "七年级",
+    "grade": "161",
+
+    "paperId": "",
+    "attachments": [
+        {
+            "attachmentId": "3390722738271092736",
+            "fileName": "Screenshot 2025-12-18 172901.png",
+            "fileUrl": "https://k12static.xdf.cn/k12-paperxdfUploadtikuImageDir/2-1766733526525.png",
+            "path": "/k12-paperxdfUploadtikuImageDir/2-1766733526525.png",
+            "fileType": "png",
+            "fileSize": 0,
+            "converterFiles": [],
+            "attachmentImagesSize": "",
+            "result": null,
+            "errorMsg": ""
+        }
+    ]
+}

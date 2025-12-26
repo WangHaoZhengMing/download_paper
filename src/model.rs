@@ -7,6 +7,20 @@ pub struct Question {
     pub stem: String,
     #[serde(default)]
     pub origin_from_our_bank: Vec<String>,
+    pub is_title: bool,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub imgs: Option<Vec<String>>
+}
+impl Default for Question {
+    fn default() -> Self {
+        Self {
+            origin: String::new(),
+            stem: String::new(),
+            origin_from_our_bank: Vec::new(),
+            is_title: false,
+            imgs: None,
+        }
+    }
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -97,16 +111,12 @@ impl MutiThreadConfig {
             }
         "#;
 
-        let response: Value = page
-            .evaluate(js_code)
-            .await?
-            .into_value()?;
+        let response: Value = page.evaluate(js_code).await?.into_value()?;
 
-        let zujvanwang_papers: Vec<PaperInfo> = serde_json::from_value(response)
-            .map_err(|e| {
-                warn!("解析试卷列表失败: {}", e);
-                e
-            })?;
+        let zujvanwang_papers: Vec<PaperInfo> = serde_json::from_value(response).map_err(|e| {
+            warn!("解析试卷列表失败: {}", e);
+            e
+        })?;
         debug!("成功解析到 {} 个试卷", zujvanwang_papers.len());
 
         if zujvanwang_papers.is_empty() {

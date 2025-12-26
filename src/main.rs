@@ -37,7 +37,7 @@ enum ProcessResult {
 // ============================================================================
 
 /// 连接到浏览器并获取页面
-async fn connect_to_browser_and_page(
+pub async fn connect_to_browser_and_page(
     port: u16,
     target_url: Option<&str>,
     target_title: Option<&str>,

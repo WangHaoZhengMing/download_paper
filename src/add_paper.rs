@@ -1,4 +1,4 @@
-use crate::ask_llm::resolve_city_with_llm;
+use crate::ask_llm::{ask_llm, ask_llm_with_config, resolve_city_with_llm};
 use crate::bank_page_info::address::{get_city_code, match_cities_from_paper_name};
 use crate::bank_page_info::grade::find_grade_code;
 use crate::bank_page_info::subject::find_subject_code;
@@ -82,111 +82,6 @@ struct FileInfo {
     key: String,
 }
 
-// ============================================================================
-// JavaScript 代码生成器
-// ============================================================================
-
-/// 生成获取上传凭证的 JavaScript 代码
-fn build_credential_request_js() -> String {
-    format!(
-        r#"
-        async (filename) => {{
-            const payload = {{
-                fileName: filename,
-                contentType: "application/pdf",
-                storageType: "cos",
-                securityLevel: 1
-            }};
-            try {{
-                const response = await fetch("{API_BASE_URL}{CREDENTIAL_API_PATH}", {{
-        method: "POST",
-        headers: {{
-            "Content-Type": "application/json",
-                        "Accept": "application/json, text/plain, */*",
-                        "tikutoken": "{TIKU_TOKEN}"
-        }},
-        credentials: "include",
-                    body: JSON.stringify(payload)
-                }});
-                const data = await response.json();
-            return data;
-            }} catch (err) {{
-            console.error(err);
-            return {{ error: err.toString() }};
-            }}
-        }}
-        "#
-    )
-}
-
-/// 生成通知应用服务器的 JavaScript 代码
-fn build_notify_server_js() -> String {
-    format!(
-        r#"
-        async (data) => {{
-            const url = "{API_BASE_URL}{NOTIFY_API_PATH}";
-            const payload = {{
-                uploadAttachments: [{{
-                    fileName: data.filename,
-                    fileType: "pdf",
-                    fileUrl: data.fileUrl,
-                    resourceType: "zbtiku_pc"
-                }}],
-                fileUploadType: 5,
-                fileContentType: 1,
-                paperId: ""
-            }};
-            try {{
-                const response = await fetch(url, {{
-                    method: "POST",
-                    headers: {{
-                        "Content-Type": "application/json",
-                        "Accept": "application/json, text/plain, */*",
-                        "tikutoken": "{TIKU_TOKEN}"
-                    }},
-                    credentials: "include",
-                    body: JSON.stringify(payload)
-                }});
-                const resData = await response.json();
-                return resData;
-            }} catch (e) {{
-                console.error("Fetch error:", e);
-                return {{ success: false, message: e.toString() }};
-            }}
-        }}
-        "#
-    )
-}
-
-/// 生成保存试卷的 JavaScript 代码
-fn build_save_paper_js() -> String {
-    format!(
-        r#"
-        async (payload) => {{
-            try {{
-                const response = await fetch("{API_BASE_URL}{SAVE_PAPER_API_PATH}", {{
-                    method: "POST",
-                    headers: {{
-                        "Content-Type": "application/json",
-                        "Accept": "application/json, text/plain, */*"
-                    }},
-                    credentials: "include",
-                    body: payload
-                }});
-                const data = await response.json();
-                return data;
-            }} catch (err) {{
-                return {{ error: err.toString() }};
-            }}
-        }}
-        "#
-    )
-}
-
-// ============================================================================
-// 通用辅助函数
-// ============================================================================
-
 /// 执行 JavaScript 代码并处理超时
 async fn execute_js_with_timeout<T>(
     page: &chromiumoxide::Page,
@@ -216,9 +111,7 @@ fn get_filename(file_path: &Path) -> Result<&str> {
         .ok_or_else(|| anyhow!("Invalid filename"))
 }
 
-// ============================================================================
-// API 调用函数
-// ============================================================================
+
 
 /// 阶段1: 获取上传凭证
 async fn get_upload_credentials(
@@ -453,27 +346,89 @@ async fn build_paper_payload(
         0
     };
     debug!("附件数量: {}", attachment_count);
+    struct MiscByAi{
+        paper_type_name: String,
+        school_year_begin: String,
+        school_year_end: String,
+        paper_term: Option<String>,
+        paper_month: Option<i16>,
+
+        
+    }
+    let user_message = "";
+    let user_message = format!(
+        r#"你是一个专业的教务数据分析助手。请根据试卷名称 "{}" 分析并提取以下元数据。
+        请返回一个纯 JSON 对象，不要包含 markdown 格式标记（如 ```json ... ```）。
+
+        字段说明：
+        1. paper_type_name: 试卷类型名称。你只可以从以下选项中选择一个最合适的类型：
+                            中考真题
+                            中考模拟
+                            学业考试
+                            自主招生
+                            小初衔接
+                            初高衔接
+                            期中考试
+                            期末考试
+                            单元测试
+                            开学考试
+                            月考
+                            周测
+                            课堂闭环
+                            阶段测试
+                            教材
+                            教辅
+                            竞赛。
+        2. school_year_begin: 学年开始年份（字符串）。例如 "2023"。
+        3. school_year_end: 学年结束年份（字符串）。例如 "2024"。
+            - 如果标题包含 "2023-2024"，则 begin="2023", end="2024"。
+            - 如果标题仅有 "2024年" 且为下学期（春季），通常属于 2023-2024 学年。
+            - 如果标题仅有 "2024年" 且为上学期（秋季），通常属于 2024-2025 学年。
+        4. paper_term: 学期（整数）。1 代表上学期（秋季），2 代表下学期（春季）。
+        5. paper_month: 考试月份（整数）。请根据试卷类型和学期推断最可能的月份。
+        - 上学期期中约11月，期末约1月。
+        - 下学期期中约4月，期末约6-7月。
+
+        JSON 格式示例：
+        {{
+        "paper_type_name": "中考真题",
+        "school_year_begin": "2023",
+        "school_year_end": "2024",
+        "paper_term": "1",
+        "paper_month": 1
+        }}
+        "#,
+        question_page.name
+    );
+
+    ask_llm(&user_message);
 
     let payload = json!({
-        "paperType":"6215",
+        "paperType":crate::bank_page_info::paper_type::get_subtype_value_by_name(&question_page.subject,subtype_name),
         "parentPaperType": "ppt4",
+        "schName": "集团",
         "schNumber": "65",
+        
+        "schoolYearBegin": "{}",//to deter
+        "schoolYearEnd": "{}",//to deter
+        "paperTerm": "1",//to deter
+        "paperMonth": 9,//to deter
         "paperYear": String::from(&question_page.year),
         "courseVersionCode": "",
         "address": [
         {
-            "province": crate::bank_page_info::address::get_province_code(&question_page.province).unwrap_or_else(||{warn!("can not get province code. using 1 by default");1}).to_string(),
+            "province": crate::bank_page_info::address::get_province_code(&question_page.province).unwrap_or_else(||{warn!("Can not get province code, using 1 by default");1}).to_string(),
             "city": city_code.unwrap_or(0).to_string() // 如果无法确定城市，使用 0
         }
         ],
         "title": &question_page.name,
         "stage": "3",
+        "stageName": "初中",
         "subject": find_subject_code(&question_page.subject).unwrap().to_string(),
         "subjectName": &question_page.subject,
-        "stageName": "初中",
         "gradeName": &question_page.grade,
         "grade": find_grade_code(&question_page.grade),
-        "schName": "集团",
+        
         "paperId": "",
         "attachments": attachments.unwrap_or_else(|| json!([]))
     });
@@ -536,7 +491,7 @@ pub async fn save_new_paper(
                 error!("保存 TOML 文件失败: {}", e);
                 e
             })?;
-            debug!("TOML 文件保存成功");
+            info!("TOML 文件保存成功");
             Ok(Some(paper_id))
         } else {
             error!("❌ API 返回成功但未包含 paper_id");
@@ -548,7 +503,106 @@ pub async fn save_new_paper(
             .message
             .unwrap_or_else(|| "Unknown error".to_string());
         error!("❌ save failed: {}", msg);
-        warn!("❌ save failed: {}", msg);
         Ok(None)
     }
+}
+
+
+
+/// 生成获取上传凭证的 JavaScript 代码
+fn build_credential_request_js() -> String {
+    format!(
+        r#"
+        async (filename) => {{
+            const payload = {{
+                fileName: filename,
+                contentType: "application/pdf",
+                storageType: "cos",
+                securityLevel: 1
+            }};
+            try {{
+                const response = await fetch("{API_BASE_URL}{CREDENTIAL_API_PATH}", {{
+        method: "POST",
+        headers: {{
+            "Content-Type": "application/json",
+                        "Accept": "application/json, text/plain, */*",
+                        "tikutoken": "{TIKU_TOKEN}"
+        }},
+        credentials: "include",
+                    body: JSON.stringify(payload)
+                }});
+                const data = await response.json();
+            return data;
+            }} catch (err) {{
+            console.error(err);
+            return {{ error: err.toString() }};
+            }}
+        }}
+        "#
+    )
+}
+
+/// 生成通知应用服务器的 JavaScript 代码
+fn build_notify_server_js() -> String {
+    format!(
+        r#"
+        async (data) => {{
+            const url = "{API_BASE_URL}{NOTIFY_API_PATH}";
+            const payload = {{
+                uploadAttachments: [{{
+                    fileName: data.filename,
+                    fileType: "pdf",
+                    fileUrl: data.fileUrl,
+                    resourceType: "zbtiku_pc"
+                }}],
+                fileUploadType: 5,
+                fileContentType: 1,
+                paperId: ""
+            }};
+            try {{
+                const response = await fetch(url, {{
+                    method: "POST",
+                    headers: {{
+                        "Content-Type": "application/json",
+                        "Accept": "application/json, text/plain, */*",
+                        "tikutoken": "{TIKU_TOKEN}"
+                    }},
+                    credentials: "include",
+                    body: JSON.stringify(payload)
+                }});
+                const resData = await response.json();
+                return resData;
+            }} catch (e) {{
+                console.error("Fetch error:", e);
+                return {{ success: false, message: e.toString() }};
+            }}
+        }}
+        "#
+    )
+}
+
+/// 生成保存试卷的 JavaScript 代码
+fn build_save_paper_js() -> String {
+    format!(
+        r#"
+        async (payload) => {{
+            try {{
+                const response = await fetch("{API_BASE_URL}{SAVE_PAPER_API_PATH}", {{
+                    method: "POST",
+                    headers: {{
+                        "Content-Type": "application/json",
+                        "Accept": "application/json, text/plain, */*",
+                        "tikutoken": "732FD8402F95087CD934374135C46EE5" 
+                    }},
+                    credentials: "include",
+                    body: payload
+                }});
+                const data = await response.json();
+                return data;
+            }} catch (err) {{
+                return {{ error: err.toString() }};
+            }}
+        }}
+        "#
+    )
 }

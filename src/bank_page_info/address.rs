@@ -491,9 +491,6 @@ static PROVINCE_CITY_MAP: phf::Map<&'static str, phf::Map<&'static str, i16>> = 
     },
 };
 
-
-
-
 /// 获取省份code
 /// 支持带"省"或不带"省"的匹配，例如："浙江省" 或 "浙江"
 pub fn get_province_code(province_name: &str) -> Option<i16> {
@@ -501,13 +498,13 @@ pub fn get_province_code(province_name: &str) -> Option<i16> {
     if let Some(code) = PROVINCE_MAP.get(province_name).copied() {
         return Some(code);
     }
-    
+
     // 如果没找到，尝试添加"省"字后匹配
     let with_suffix = format!("{}省", province_name);
     if let Some(code) = PROVINCE_MAP.get(&with_suffix).copied() {
         return Some(code);
     }
-    
+
     // 如果还是没找到，尝试去掉"省"字后匹配
     let without_suffix = province_name.trim_end_matches("省");
     if without_suffix != province_name {
@@ -515,7 +512,7 @@ pub fn get_province_code(province_name: &str) -> Option<i16> {
             return Some(code);
         }
     }
-    
+
     // 特殊处理：自治区、直辖市等
     let variants = vec![
         format!("{}自治区", province_name),
@@ -526,12 +523,12 @@ pub fn get_province_code(province_name: &str) -> Option<i16> {
             return Some(code);
         }
     }
-    
+
     None
 }
 
 /// 获取城市code
-/// 
+///
 /// 逻辑：
 /// 1. 如果提供了 province_name，先尝试在该省份下查找
 /// 2. 如果没提供 province_name，或者在指定省份下没找到，则在所有省份下查找
@@ -557,7 +554,7 @@ pub fn get_city_code(province_name: Option<&str>, city_name: &str) -> Option<i16
         }
         None
     };
-    
+
     // 1. 尝试在指定省份查找
     if let Some(prov) = province_name {
         // 先尝试直接匹配省份名
@@ -613,7 +610,7 @@ pub fn find_code(name: &str) -> Option<i16> {
 /// 返回匹配到的城市名称列表（可能为空或多个）
 pub fn match_cities_from_paper_name(paper_name: &str, province_name: Option<&str>) -> Vec<String> {
     let mut matched_cities = Vec::new();
-    
+
     // 如果提供了省份，优先在该省份的城市中查找
     if let Some(prov) = province_name {
         if let Some(city_map) = PROVINCE_CITY_MAP.get(prov) {
@@ -626,12 +623,12 @@ pub fn match_cities_from_paper_name(paper_name: &str, province_name: Option<&str
             }
         }
     }
-    
+
     // 如果已经在指定省份找到匹配，直接返回
     if !matched_cities.is_empty() {
         return matched_cities;
     }
-    
+
     // 如果没找到或没提供省份，在所有城市中查找
     for (_, city_map) in PROVINCE_CITY_MAP.entries() {
         for (city_name, _) in city_map.entries() {
@@ -644,7 +641,7 @@ pub fn match_cities_from_paper_name(paper_name: &str, province_name: Option<&str
             }
         }
     }
-    
+
     matched_cities
 }
 
