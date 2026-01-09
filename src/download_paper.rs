@@ -312,7 +312,7 @@ async fn generate_pdf(page: &chromiumoxide::Page, path: &str) -> Result<()> {
 
 #[cfg(test)]
 mod tests {
-    use crate::connect_to_browser_and_page;
+    use crate::browser::connect_to_browser_and_page;
     use crate::download_paper::download_page;
     use tracing::info;
     use std::fs;
