@@ -1,0 +1,264 @@
+name = "浙江省杭州市之江实验中学2024-2025学年九年级下学期第一次月考科学试题"
+province = "浙江"
+grade = "九年级"
+year = "2024"
+subject = "科学"
+
+[[stemlist]]
+origin = ""
+stem = "一、选择题"
+origin_from_our_bank = []
+is_title = true
+
+[[stemlist]]
+origin = "2024·浙江湖州·模拟预测"
+stem = "1. 2024年5月3日，我国嫦娥六号月球探测器发射升空，开启了世界首次月球背面采样返回之旅。此前科研团队对嫦娥五号带回的月壤和月岩进行分析，发现月球表面土壤中有丰富的钛铁矿，其主要成分为钛酸亚铁FeTiO3，钛元素的部分信息如图，下面说法正确的是（       ）A．钛原子的中子数是22B．钛原子的核外电子数是22C．FeTiO₃中Ti化合价为+3D．钛元素的相对原子质量为47.87克"
+origin_from_our_bank = []
+is_title = false
+imgs = ["https://img.xkw.com/dksih/QBM/editorImg/2024/6/3/c692f262-30b0-4ee4-97d3-023bd9476aaa.png"]
+
+[[stemlist]]
+origin = "24-25七年级上·浙江·期末"
+stem = "2. 如图是2023世界机器人大会博览会上的机器人“李白”在吟诵《长恨歌》，一旁的“杜甫”感叹“好诗！太白兄！”的场景，则“李白”“杜甫”两机器人（　　）   A．属于非生物B．具有应激性C．能生长与繁殖D．能遗传与变异"
+origin_from_our_bank = []
+is_title = false
+imgs = ["https://img.xkw.com/dksih/QBM/editorImg/2024/3/13/f18e44f8-268b-4c35-8d2a-b33a76d6fbef.png"]
+
+[[stemlist]]
+origin = "24-25九年级上·浙江杭州·阶段练习"
+stem = "3. 如图所示，小球A沿着粗糙的曲面加速向下滚动的过程中，小球A的（　　）A．动能不变，重力势能不变，机械能不变B．动能变大，重力势能变小，机械能变小C．动能变大，重力势能变小，机械能不变D．动能变大，重力势能变小，机械能变大"
+origin_from_our_bank = []
+is_title = false
+imgs = ["https://img.xkw.com/dksih/QBM/editorImg/2025/1/15/6e85d047-d5ed-483c-a7ee-1271352e8186.png"]
+
+[[stemlist]]
+origin = "2024·浙江·二模"
+stem = "4. 根据如图所示的光线，虚线框内应填入的光学元件是（　　）A．B．C．D．"
+origin_from_our_bank = []
+is_title = false
+imgs = ["https://img.xkw.com/dksih/QBM/editorImg/2024/5/26/be2a2584-91fd-41d8-9fa0-483d20e4825d.png", "https://img.xkw.com/dksih/QBM/editorImg/2024/5/26/112dd05a-a31c-46f2-ad3f-9986ae9c31fe.png", "https://img.xkw.com/dksih/QBM/editorImg/2024/5/26/f5ad3bc9-d13b-4d15-8163-26c040157d49.png", "https://img.xkw.com/dksih/QBM/editorImg/2024/5/26/77bcf3ae-100c-4cfa-b97d-d7602bcfb790.png", "https://img.xkw.com/dksih/QBM/editorImg/2024/5/26/5c3fbb4d-12d5-445a-9159-d75fd01bb046.png"]
+
+[[stemlist]]
+origin = "2024·四川绵阳·模拟预测"
+stem = "5. 学好化学能促进人的全面发展。下列项目所涉化学知识不正确的是（　　）选项项目化学知识A“德”：过期药品分类投放过期药品中含有毒有害成分B“体”：剧烈运动前喝葡萄糖口服液补充人体所需能量C“美”：Mg在中燃烧发出耀眼的白光作Mg燃烧的助燃剂D“劳”：用明矾对水净化明矾可以杀菌消毒A．AB．BC．CD．D"
+origin_from_our_bank = []
+is_title = false
+imgs = ["https://staticzujuan.xkw.com/quesimg/Upload/formula/e71c86dcd9a9e9b09bbbb65b9d313435.svg", "https://staticzujuan.xkw.com/quesimg/Upload/formula/e71c86dcd9a9e9b09bbbb65b9d313435.svg"]
+
+[[stemlist]]
+origin = "2024·浙江·三模"
+stem = "6. 下列关于体育测试项目涉及的力学知识说法中，正确的是（　　）A．立定跳远——脚用力向后蹬地，是为了增大惯性B．足球绕杆——在草地上滚动的足球只受重力和支持力C．掷实心球——把实心球掷出去时，手对球的作用力大于球对手的作用力D．引体向上——双手握住单杠静止时，人受到了平衡力的作用"
+origin_from_our_bank = []
+is_title = false
+
+[[stemlist]]
+origin = "24-25九年级下·浙江杭州·阶段练习"
+stem = "7. 观察自然现象，通过实验研究揭示其原理，并解释生产、生活中的应用，这是科学学习的一种基本方法。下列各项的现象、原理与应用之间不对应的是（       ）选项ABCD现象海拔较高的山上，普通的锅难以将米饭煮熟火车站站台，人必须站在黄线以外的区域候车晾在通风处的衣服干得快煮熟的汤圆浮在水面上探究原理沸点与气压的关系气压与流速的关系影响蒸发快慢的因素物体的浮沉条件应用高压锅飞机吸尘器轮船A．AB．BC．CD．D"
+origin_from_our_bank = []
+is_title = false
+imgs = ["https://img.xkw.com/dksih/QBM/editorImg/2025/4/7/cc5fc628-44e7-4ce0-a79d-7a22dcea873c.png", "https://img.xkw.com/dksih/QBM/editorImg/2025/4/7/b24f9335-17c4-4e17-96c0-6890d4bb70bc.png", "https://img.xkw.com/dksih/QBM/editorImg/2025/4/7/859a0a82-c2c4-402f-9a66-6d23180f247b.png", "https://img.xkw.com/dksih/QBM/editorImg/2025/4/7/5c0bbe1e-fc00-443d-b283-09c1c40f3b6a.png"]
+
+[[stemlist]]
+origin = "23-24九年级下·浙江杭州·阶段练习"
+stem = "8. “2024年3月”17日晚，乒乓球WTT新加坡大满贯中国选手王楚钦、王曼昱分别获得男子单打、女子单打金牌。领奖时国乒选手拿着奖杯，球迷们大声呼喊他们的名字，激动之情难以言表。下列有关叙述正确的是（　　）A．球迷情绪激动不受激素调节的影响B．国乒选手比赛时大量出汗，主要是为了散热C．赢球时教练挥臂呐喊是非条件反射D．比赛时运动员消耗大量的能量，以无氧呼吸的方式提供"
+origin_from_our_bank = []
+is_title = false
+
+[[stemlist]]
+origin = "2024·浙江宁波·一模"
+stem = "9. 2023年9月我国科研人员在西藏自治区的高海拔石壁上发现了一种新物种——墨脱报春，它的叶片近圆形，边缘略反折，花期在5至6月，果期7月，墨脱报春属于（　　）A．被子植物B．蕨类植物C．苔藓植物D．藻类植物"
+origin_from_our_bank = []
+is_title = false
+
+[[stemlist]]
+origin = "2024·浙江宁波·一模"
+stem = "10. 2023年6月18日，泰坦号潜水器在北大西洋失踪。泰坦号由碳纤维和钛（密度约为铁的一半）构造，使用四个电动推进器，能够以每小时3节的速度移动。下列有关该潜水器的说法中正确的是（　　）A．潜水器水下下潜过程中所受浮力逐渐增大B．使用金属钛既提高了强度，又增大了结构质量C．若推进器意外损坏，依靠释放“压仓物”有可能使潜水器上浮D．灾难发生时，舱体瞬间向内塌陷，遭遇“内爆”，这是由于舱内压力过大导致的"
+origin_from_our_bank = []
+is_title = false
+imgs = ["https://img.xkw.com/dksih/QBM/editorImg/2024/5/17/d83f2fb0-9231-4b69-a159-f4c651e3e83c.png"]
+
+[[stemlist]]
+origin = "2024·浙江温州·二模"
+stem = "11. 如图是一款能发电的魔方充电器，转动魔方时可将机械能转化为电能储存于魔方内。下列实验原理和魔方充电器相同的是（       ）A．B．C．D．"
+origin_from_our_bank = []
+is_title = false
+imgs = ["https://img.xkw.com/dksih/QBM/editorImg/2025/3/24/e34479d5-4ce6-498f-9388-e83a4147a033.png", "https://img.xkw.com/dksih/QBM/editorImg/2025/3/24/75ef3ce9-8437-453a-9ef7-b2ee1feda136.png", "https://img.xkw.com/dksih/QBM/editorImg/2025/3/24/dd5991d8-3972-46dc-a32a-289e7cbf4be2.png", "https://img.xkw.com/dksih/QBM/editorImg/2025/3/24/169f8368-96f9-4188-aa45-ba3117cdc9b0.png", "https://img.xkw.com/dksih/QBM/editorImg/2025/3/24/77e8a5f6-e06c-473e-9cc0-282bbf75df13.png"]
+
+[[stemlist]]
+origin = "24-25九年级下·浙江杭州·月考"
+stem = "12. 下列关于银河系的描述，符合科学事实的是（       ）A．金星能自行发光B．太阳在银河系的中心C．行星绕太阳公转方向相同D．与地球相邻的行星是火星和木星"
+origin_from_our_bank = []
+is_title = false
+
+[[stemlist]]
+origin = "2024·浙江台州·三模"
+stem = "13. 对下列人体异常生理状态的解释错误的是（　　）A．糖尿病人血糖含量高于正常值，主要原因是体内胰岛素分泌过多B．发高烧的病人出现消化不良现象，主要原因是体温过高影响了消化酶的活性C．醉酒时，人走路东倒西歪，主要原因是酒精麻醉了小脑，影响了人的平衡功能D．煤气中毒的原因是一氧化碳与血红蛋白结合，影响了血红蛋白运输氧的能力"
+origin_from_our_bank = []
+is_title = false
+
+[[stemlist]]
+origin = "2023·浙江金华·三模"
+stem = "14. 下列关于遗传与进化的说法中正确的是（　　）A．凡是外界环境引起的变异都是可遗传变异B．DNA是生物的主要遗传物质，它由染色体和蛋白质组成C．在有毒农药的长期作用下，农田害虫逐渐产生了抗药性D．“杂交”的后代常常具有比亲代更优良的性状，这在科学上被称为“杂交优势”"
+origin_from_our_bank = []
+is_title = false
+
+[[stemlist]]
+origin = "2024·浙江·一模"
+stem = "15. 西汉的《春秋纬》中有对“玳瑁吸诺”的记载，描述摩擦过的玳瑁外壳因带电而吸引轻小物体，玳瑁外壳带电的原因是（       ）A．摩擦使物体间电荷发生了转移B．摩擦使物体内部电荷转移到表层C．摩擦生热使原子发生了裂变D．摩擦过程中创生了多余电荷"
+origin_from_our_bank = []
+is_title = false
+
+[[stemlist]]
+origin = ""
+stem = "二、填空题"
+origin_from_our_bank = []
+is_title = true
+
+[[stemlist]]
+origin = "2023·浙江·一模"
+stem = "16. 如图甲所示是一种利用紫外线杀菌的筷子盒，内置“220V 4W”的紫外线灯管，装入干燥筷子只需3~5分钟即可完成杀菌消毒。取筷子的原理结构示意图如图乙。   （1）按压A端一次能取出一根筷子，既环保又卫生。按压时，可以把它看成一个___________杠杆（选“省力”、“费力”或“等臂”）；（2）从预防传染病的角度，对筷子进行消毒属于___________；（3）紫外线灯正常工作时通过的电流为___________安（保留2位小数）。"
+origin_from_our_bank = []
+is_title = false
+imgs = ["https://img.xkw.com/dksih/QBM/editorImg/2023/7/2/8c4f2af5-71fb-4a3e-934c-d646cda30fad.png"]
+
+[[stemlist]]
+origin = ""
+stem = "三、解答题"
+origin_from_our_bank = []
+is_title = true
+
+[[stemlist]]
+origin = "24-25九年级下·浙江杭州·阶段练习"
+stem = "17. 幽门螺旋杆菌（简称“Hp”）会导致胃炎、胃溃疡等疾病，在我国感染率有40%～60%，呈现明显的家族聚集性传播现象。目前常用尿素呼气试验进行检测，当患者服用含或的尿素胶囊后，尿素可被Hp产生的尿素酶分解成或，然后定时收集呼出的气体，测定其数值变化。根据上述信息，回答下列问题：(1)幽门螺旋杆菌通过________方式繁殖。(2)尿素呼气试验所需的时间短与尿素酶具有________性有关。(3)呼气试验时，受测者向集气袋中吹气，此时横膈肌处于图中________（填“a”或“b”）状态。"
+origin_from_our_bank = []
+is_title = false
+imgs = ["https://staticzujuan.xkw.com/quesimg/Upload/formula/89473f7c233c15431dd90ac5cb305c8e.svg", "https://staticzujuan.xkw.com/quesimg/Upload/formula/e639d4fec9d51f71f67f59d7f142c08a.svg", "https://staticzujuan.xkw.com/quesimg/Upload/formula/5ababb67562d93731c453d7ea9a5ecc6.svg", "https://staticzujuan.xkw.com/quesimg/Upload/formula/69684bde3faf72eae3cdec74c8ffd9fe.svg", "https://img.xkw.com/dksih/QBM/editorImg/2025/4/2/9132bcc5-19e8-419d-822f-faa010a635ac.png"]
+
+[[stemlist]]
+origin = ""
+stem = "四、填空题"
+origin_from_our_bank = []
+is_title = true
+
+[[stemlist]]
+origin = "24-25九年级下·浙江杭州·阶段练习"
+stem = "18. “打铁花”这一传统民间焰火表演已列入国家非遗名录。大致方法是：利用焦炭燃烧产生的高温将生铁（合金）熔化为铁水，表演者用一手拿的下棒猛击另一手盛有铁水的上棒，使铁水洒向花棚上的鞭炮和烟花，形成铁花飞溅、烟火如瀑、鞭炮齐鸣的场景。(1)生铁属于________（选填“单质”“化合物”或“混合物”）。(2)焦炭充分燃烧温度可达2500℃，足以将生铁熔化。要使炉中焦炭的燃烧温度达到最高，除了足够的焦炭外，还须不断鼓入________。"
+origin_from_our_bank = []
+is_title = false
+imgs = ["https://img.xkw.com/dksih/QBM/editorImg/2025/4/1/71621c30-72b8-4f30-8ef7-bb5d4f3dc569.png"]
+
+[[stemlist]]
+origin = "24-25九年级下·浙江杭州·阶段练习"
+stem = "19. 干热岩是一种地热能源，是指存在于地壳深处的无水岩体，其温度一般在200℃以上。全球陆区干热岩资源量是全球石油、天然气和煤炭蕴藏能量的近30倍，我国干热岩资源占世界资源量的左右。如图为利用其发电的原理图，请回答下列问题。(1)由图可知利用干热岩发电，主要涉及的能量转化有：内能→________→电能。(2)干热岩是未来大力发展新能源之一，与火力发电相比，该能源的优点是：________________。"
+origin_from_our_bank = []
+is_title = false
+imgs = ["https://staticzujuan.xkw.com/quesimg/Upload/formula/5e6486784415f3537c9a13556c05d893.svg", "https://img.xkw.com/dksih/QBM/editorImg/2025/4/1/89baafc2-21a1-4f6e-8976-5e66da1645ab.png"]
+
+[[stemlist]]
+origin = "2024·浙江温州·二模"
+stem = "20. 如图是某品牌无人机，由锂电池供电，采用4个电动机带动旋翼转动，下表是部分飞行参数，若空气阻力忽略不计。指标参数质量1100克每个电动机额定电压10伏额定电流5安最大上升速度运动模式5米/秒普通模式4米/秒（1）无人机落地断电后，旋翼还会继续转动一会儿，这是因为旋翼具有__________；（2）无人机飞行时，4个电动机正常工作时的总电功率为__________瓦；（3）无人机在运动模式和普通模式下，都在竖直方向上匀速下降，其受到的升力分别为F1和F2，则F1__________F2。（选填“大于”、“小于”或“等于”）"
+origin_from_our_bank = []
+is_title = false
+imgs = ["https://img.xkw.com/dksih/QBM/editorImg/2024/6/7/f6cca03b-dfc4-4dfa-a2bf-f18807013bf9.jpg"]
+
+[[stemlist]]
+origin = ""
+stem = "五、解答题"
+origin_from_our_bank = []
+is_title = true
+
+[[stemlist]]
+origin = "24-25九年级下·浙江杭州·阶段练习"
+stem = "21. 人体各个系统相互联系、相互协调，以完成生命活动。如图是小之同学在参加体育中考时，身体与外界环境之间的部分物质交换示意图。请据图回答问题：(1)为保证测试时充足的能量供应，王伟早晨吃了鸡蛋、牛奶、面包等食物，其中营养物质被消化吸收进入血液后，首先进入B系统中心脏的________。(2)C表示的是________系统，①表示进入该系统的气体，②表示排出该系统的气体，那么①②相比较，①中所含的较多的气体是________。(3)当营养物质随血液流经一个肾单位时，血浆中的一部分水、无机盐、葡萄糖和尿素等物质，都可以经过肾小球的________（选填“滤过”或“重吸收”）作用到肾小囊中，形成原尿。"
+origin_from_our_bank = []
+is_title = false
+imgs = ["https://img.xkw.com/dksih/QBM/editorImg/2025/6/7/6b5f480a-996e-4a7f-a023-ae04c5c2e6c0.png"]
+
+[[stemlist]]
+origin = "24-25九年级下·浙江杭州·阶段练习"
+stem = "22. 2025年4月4日（三月初七）是清明节。清明既是节日，也是节气。(1)清明节当天地球接近于图中的________位置。(2)这一天月相是________。(3)下列现象中，是地球公转造成的有________。（填序号）①四季更替；     ②昼夜交替；     ③昼夜长短的变化；④正午的太阳高度角是一天中最大的；     ⑤杭州夏至日是正午太阳高度角最大"
+origin_from_our_bank = []
+is_title = false
+imgs = ["https://img.xkw.com/dksih/QBM/2025/3/31/3723916909756416/3724329647497216/STEM/d447ec40321b466db7b73e7fa2bdf7aa.png"]
+
+[[stemlist]]
+origin = ""
+stem = "六、探究题"
+origin_from_our_bank = []
+is_title = true
+
+[[stemlist]]
+origin = "24-25九年级下·浙江杭州·阶段练习"
+stem = "23. 某科学兴趣小组为研究植物呼吸作用，进行了以下实验：Ⅰ.选取两份等量且生长状况相同、具有完整根茎叶的新鲜菠菜，编号为甲组和乙组。甲组菠菜用开水烫2-3分钟，乙组不作处理。然后将两份菠菜分别放入两个不透光且密闭的相同恒温箱中，将氧气和二氧化碳浓度传感器探头置于箱内（如图1）。Ⅱ.连接计算机、数据采集器和传感器探头，采集24小时装置内氧气和二氧化碳浓度数据，并自动生成两种气体浓度随时间变化图像，如图2（不考虑微生物呼吸作用对本实验的影响）。实验分析与评价：(1)实验中采用的箱子是不透光的，目的是________________。(2)植物体内的氧气和二氧化碳是通过图3中的________（填字母）进出植物体。(3)请写出植物呼吸作用的文字表达式________________。(4)根据图2可知，乙组氧气浓度先降低得快后降低得慢，二氧化碳浓度先升高得快后升高得慢，原因是________________。"
+origin_from_our_bank = []
+is_title = false
+imgs = ["https://img.xkw.com/dksih/QBM/editorImg/2025/6/8/ae760364-af9f-4138-b9e0-68eb5b3835a7.png", "https://img.xkw.com/dksih/QBM/editorImg/2025/6/8/cd3fac8d-3969-4d14-a8ca-e14c5afe7fc9.png"]
+
+[[stemlist]]
+origin = "2024·浙江·一模"
+stem = "24. 爆炸盐的主要成分是过氧碳酸钠（化学式为：），又被称为固体双氧水。是目前市面上新出现的洗涤神剂。它溶于水后，溶液呈现碱性，还能产生具有漂白氧化性的物质，将有机色素氧化为稳定的无色物质，从而快速去除各类顽固污渍。某兴趣小组针对爆炸盐展开相关探究并查阅相关资料：资料1：爆炸盐并不会发生真正的爆炸，当其溶于温水后会产生大量气泡，出现泡沫剧烈翻滚的现象，形象称为“爆炸盐”。资料2：将爆炸盐溶于水后，会分解成碳酸钠和过氧化氢两种物质，过氧化氢受热会进一步发生分解。（1）将爆炸盐溶解于水中，滴加紫色石蕊试液，溶液呈现______色。（2）爆炸盐溶于温水后能产生大量的气泡，请在图甲装置中，选择用爆炸盐溶液制备该气体的最佳发生装置和收集装置______。（3）过氧碳酸钠中具有漂白洗涤效果的主要成分为过氧化氢，为什么要制成过氧碳酸钠，而不直接用过氧化氢溶液作为洗涤剂的原因是______。（4）爆炸盐溶于温水后产生的气体在医学上有一定的用途，某同学设计图乙所示的便携式制气装置，供病人在生活中使用。其中容器B中的水的作用是______。"
+origin_from_our_bank = []
+is_title = false
+imgs = ["https://staticzujuan.xkw.com/quesimg/Upload/formula/807bb99b2393571f870eb13b5c9858cc.svg", "https://img.xkw.com/dksih/QBM/editorImg/2024/7/8/c30ab9f8-438d-4e8c-9591-42e8e7fc61ff.png", "https://img.xkw.com/dksih/QBM/editorImg/2024/7/8/d0d971e1-a11b-4894-bf72-827682c11008.png"]
+
+[[stemlist]]
+origin = "2024·浙江温州·二模"
+stem = "25. 小明在学习动滑轮后得知：动滑轮的实质是动力臂为阻力臂两倍的省力杠杆。小明思考：“使用动滑轮时，若拉力的方向没有保持竖直向上，是否还能省一半的力”，于是设计了由滑轮、滑轨、滑块、弹簧测力计等组成的实验装置（如图甲），通过移动滑块来改变拉力与竖直方向的夹角，进行实验。其中绳子重和摩擦忽略不计，获得实验数据如下表：实验序号钩码总重力G/牛拉力作用线与竖直方向的夹角/度拉力大小F/牛①302②3302.4③3452.8④3604（1）根据表中第①次的实验数据，可以得知动滑轮重为__________牛；（2）分析4次实验数据，你能得到的实验结论是__________；（3）为了使实验结论更具有普遍性，接下来的设计是：__________；（4）小明查阅资料后，发现改变拉力与竖直方向的夹角时，同时动滑轮的支点也发生改变，如图乙所示，若拉力F为动力，动滑轮和物体总重视为阻力。请结合以上信息和杠杆平衡条件等相关科学知识，解释从第①次到第④次拉力变化的原因？__________。"
+origin_from_our_bank = []
+is_title = false
+imgs = ["https://staticzujuan.xkw.com/quesimg/Upload/formula/c24095e409b025db711f14be783a406c.svg", "https://img.xkw.com/dksih/QBM/editorImg/2024/6/7/67bbb592-64ca-4bb1-b2d9-67bb53c065e0.png", "https://staticzujuan.xkw.com/quesimg/Upload/formula/c24095e409b025db711f14be783a406c.svg", "https://staticzujuan.xkw.com/quesimg/Upload/formula/c24095e409b025db711f14be783a406c.svg"]
+
+[[stemlist]]
+origin = "24-25九年级下·浙江杭州·阶段练习"
+stem = "26. 某班同学在实验室做“测定小灯泡额定电功率”的分组实验。提供的实验器材如下：规格为“3.8V”的小灯泡、学生电源（电压恒为6V）、电流表（0～0.6A，0～3A）、电压表（0～3V，0～15V）、滑动变阻器（“ 1A”）、开关等各一只，导线若干。小智组同学发现，实验桌上的电压表0～15V的量程已损坏，其他器材完好。【提出问题】如何用电压表0～3V的量程，完成“测定小灯泡额定电功率”的实验。【原理分析】因为小灯泡的额定电压为“3.8V”，超过了0～3V的量程，电压表直接接在小灯泡上无法完成实验；根据串联电路的分压特点（）可知，当电源电压为6V，要使小灯泡正常发光时，可以改变电压表的连接位置，将电压表接在滑动变阻器两端，来完成实验。（1）将电压表接在滑动变阻器两端，若要使小灯泡正常发光时，滑动变阻器两端电压为________；【实验设计】小静将电压表接在滑动变阻器两端，按照规范操作，闭合开关后，小灯泡发光，但电压表示数如图所示。（2）分析出现此现象的原因是________________；【改进创新】为解决上述问题，小虹认为可以：①先将电压表（0～3V）接在小灯泡两端（如甲），移动滑动变阻器的滑片，设置一个小灯泡两端的电压值；②接着，保持滑动变阻器的滑片位置不变，再将该电压表改接在滑动变阻器的两端，移动滑动变阻器的滑片，完成实验。（3）根据电压表的量程（0～3V）及电源电压（6V）判断，操作①中小灯泡两端的电压应设置为________V，才能使操作②能顺利完成；（4）要使小灯泡达到额定电压，操作②中滑动变阻器的滑片应向________（填“左”或“右”）移动。【总结反思】实验原理相同的情况下，我们可以采用不同的实验途径来完成实验。"
+origin_from_our_bank = []
+is_title = false
+imgs = ["https://staticzujuan.xkw.com/quesimg/Upload/formula/e9fd79de5050f5960c9478154c48e830.svg", "https://staticzujuan.xkw.com/quesimg/Upload/formula/aeaf7bf05f2b4c5ab81fc73f652955aa.svg", "https://img.xkw.com/dksih/QBM/editorImg/2025/4/8/85f6fd6e-1619-4fde-be61-055e81e07410.png"]
+
+[[stemlist]]
+origin = "2024·浙江·一模"
+stem = "27. 某同学将稀盐酸逐滴加入到氢氧化钡溶液中（如图甲），无明显现象．为确定反应后溶液中溶质组成，他进行以下实验探究：【建立猜想】猜想①：氢氧化钡过量；猜想②：盐酸过量；猜想③：两者恰好完全反应．【实验设计】方案一：取少量反应后溶液于试管1中，滴入少量无色酚酞，溶液不变色，得出猜想①不成立．方案二：用表中步骤进行探究，得出猜想②成立：步骤实验操作实验现象Ⅰ重新取样，滴加少继紫色石蕊试剂变红Ⅱ继续滴加过量的的溶液先产生气泡，后产生白色沉淀，溶液由红色变蓝色（1）如图乙描述的是氢氯化钡与盐酸反应的微观过程，请从微观角度分析反应的实质是______．（2）根据实验结果分析可知图甲中反应后溶液中溶质组成是______．（3）他的同学认为方案二中步骤Ⅱ多余，你认为他的同学的理由是：______．【拓展探究】（4）相同条件下，离子浓度越大，电导率越大．他将某溶液平均分成两份置于两个烧杯中并插入电导率传感器（如丙图1），往其中一份滴加稀硫酸，往另一份滴加盐酸溶液，测得溶液的电导率变化（如丙图2）所示．结合材料信息和所学知识分析：曲线______（选填“甲”或“乙”）对应氢氧化钡与硫酸反应．"
+origin_from_our_bank = []
+is_title = false
+imgs = ["https://img.xkw.com/dksih/QBM/editorImg/2024/7/8/f9d4be32-571e-4bf3-86cf-64f047d365c0.png", "https://img.xkw.com/dksih/QBM/editorImg/2024/7/8/96bf3f81-ceaf-410b-b3c3-7263fb0525be.png", "https://img.xkw.com/dksih/QBM/editorImg/2024/7/8/c7311b1d-bb57-4ec8-a273-291d44e688a9.png", "https://staticzujuan.xkw.com/quesimg/Upload/formula/889220d0a5054f0df8fdb14fec5409b8.svg", "https://staticzujuan.xkw.com/quesimg/Upload/formula/22ef88c44e44e8021abaa12aaf6d467c.svg"]
+
+[[stemlist]]
+origin = ""
+stem = "七、解答题"
+origin_from_our_bank = []
+is_title = true
+
+[[stemlist]]
+origin = "24-25九年级下·浙江杭州·阶段练习"
+stem = "28. 目前我国生活垃圾中厨余垃圾占比最大，对其进行“减量化、无害化、资源化”处理有重要意义。利用微生物处理厨余垃圾，可起到“变废为宝”的作用。(1)将厨余垃圾放入沼气池中，经甲烷菌发酵产生沼气。如右图所示为沼气中各成分含量，为了减少温室效应气体的排放，可用氢氧化钠溶液吸收，写出这一反应的化学方程式：________________。(2)厨余垃圾中淀粉可被曲霉分解，过程中曲霉会向细胞外分泌淀粉酶，最终将淀粉催化分解为________。(3)约30kg的厨余垃圾通过该技术处理可产生的甲烷，完全燃烧这些甲烷理论上能将多少kg（保留整数）的水从20℃加热至100℃？【，】"
+origin_from_our_bank = []
+is_title = false
+imgs = ["https://img.xkw.com/dksih/QBM/editorImg/2025/4/1/f3f65463-f9d0-4e1b-b665-8d0e1646a854.png", "https://staticzujuan.xkw.com/quesimg/Upload/formula/a4298cb837170c021b9f2cd4e674a6a3.svg", "https://staticzujuan.xkw.com/quesimg/Upload/formula/29c96862ee2bdd93527d05dbc2f96d54.svg", "https://staticzujuan.xkw.com/quesimg/Upload/formula/143b58ab5c3205c20956b6fac6660420.svg", "https://staticzujuan.xkw.com/quesimg/Upload/formula/0fb65193bbe7fd1196f8c73b3ee9f747.svg"]
+
+[[stemlist]]
+origin = "24-25九年级下·浙江杭州·阶段练习"
+stem = "29. 《天工开物》中记载了三千年前人们在井上汲水使用的桔槔，如图甲所示。图乙是其简化模型图，水平轻质杠杆MN的力臂，；在杠杆左端悬挂质量为2kg的物体A，右端挂边长为10cm的正方体B完全浸没于水中，此时杠杆平衡。（水的密度为）求：(1)B物体受到的浮力。(2)B物体的密度。(3)在杠杆M端施加拉力F使物体B恰好完全离开水面时，求此时F的大小。"
+origin_from_our_bank = []
+is_title = false
+imgs = ["https://staticzujuan.xkw.com/quesimg/Upload/formula/cc850bc6eca95afaca3faa9fc36b7293.svg", "https://staticzujuan.xkw.com/quesimg/Upload/formula/c8a8c69131c968f3cd67fb8e4a4a89f5.svg", "https://staticzujuan.xkw.com/quesimg/Upload/formula/9b4adeebfda973edcdb9e2eefb40a6c6.svg", "https://img.xkw.com/dksih/QBM/editorImg/2025/4/7/d8d8b057-fd55-4b11-94ca-c959ef528052.png"]
+
+[[stemlist]]
+origin = "24-25九年级下·浙江杭州·阶段练习"
+stem = "30. 图甲中A是一种常见的酸，它能与黑色固体B反应，B质量为8克，将NaOH溶液渐渐加入到C中，生成蓝色沉淀E的质量与加入NaOH溶液的质量关系如图乙所示，在D中加入溶液能生成一种不溶于稀硝酸的白色沉淀。(1)A溶液中溶质的化学式为________；(2)A与B反应时的现象是________________；(3)NaOH溶液中溶质的质量分数是多少？"
+origin_from_our_bank = []
+is_title = false
+imgs = ["https://staticzujuan.xkw.com/quesimg/Upload/formula/7b9d5cefc491333f46dd16b60fffa616.svg", "https://img.xkw.com/dksih/QBM/editorImg/2025/4/2/ce6fe882-c0b8-4cd5-9675-36697a256637.png"]
+
+[[stemlist]]
+origin = "2020·浙江绍兴·一模"
+stem = "31. 晚上睡觉前，小明同学用有预约功能的电饭煲为家人准备第二天早餐粥。他将大米等食材放入电饭煲内，接通家庭电路，经过了待机、加热、保温三个过程，吃早餐前断开电源，电饭煲消耗的电功率随时间变化的图像如图甲所示。（1）加热过程电饭煲消耗的电能是______。（2）已知小明家电饭煲加热和保温部分基本电路原理如图乙所示，是接通家庭电路的开关，是自动开关，R1和R2为电阻不变的电热丝，则当电饭煲处于保温档时，、所处的状态是________。（2）电热丝R2的阻值为多少？_____"
+origin_from_our_bank = []
+is_title = false
+imgs = ["https://staticzujuan.xkw.com/quesimg/Upload/formula/a8260c79d7294a07e910c4d7290fa290.svg", "https://img.xkw.com/dksih/QBM/2020/8/14/2527549686890496/2529907034611712/STEM/68cb0bd4-8243-48ce-9209-e49f42fa3d7d.png", "https://staticzujuan.xkw.com/quesimg/Upload/formula/b4efbcdb90b28563485995178e82f2c9.svg", "https://staticzujuan.xkw.com/quesimg/Upload/formula/9d43eb0b274e00cbbc4a210da4165042.svg", "https://staticzujuan.xkw.com/quesimg/Upload/formula/530f5b63e797195906285c0c03eb9276.svg", "https://staticzujuan.xkw.com/quesimg/Upload/formula/9d43eb0b274e00cbbc4a210da4165042.svg", "https://staticzujuan.xkw.com/quesimg/Upload/formula/530f5b63e797195906285c0c03eb9276.svg"]
+
+[[stemlist]]
+origin = "2023·浙江杭州·三模"
+stem = "32. 2022年我国将有6名航天员生活在空间站。氧气、水、食物等是维持航天员驻留空间站的必要物质。为提高物质的利用率，目前空间站通过以下途径实现物质循环利用： （1）航天员呼出的气体中除了二氧化碳和水蒸气以外，还有比较多的_______。（2）由图可知，目前空间站通过物质循环获得水的途径共有_______条，其中尿液净化时必须除去尿液中的___________等代谢废物。（3）为实现氧的循环，目前空间站内利用氢气和航天员呼出的二氧化碳，在一定条件下转化为___________。（4）请根据空间站物质循环图，分析目前空间站是否实现了氢的循环？并说明理由。___________。"
+origin_from_our_bank = []
+is_title = false
+imgs = ["https://img.xkw.com/dksih/QBM/editorImg/2024/4/18/6ac894c0-0dc4-4caa-a4eb-ac7d1a767f20.png"]
