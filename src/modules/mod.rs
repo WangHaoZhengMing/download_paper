@@ -2,7 +2,7 @@ pub mod browser;
 pub mod ai;
 pub mod storage;
 pub mod catalogue;
-
+pub mod metadata;
 pub use browser::*;
 pub use ai::*;
 pub use storage::*;

@@ -149,3 +149,4 @@ pub async fn resolve_city_with_llm(
     info!("LLM 返回的城市 '{}' 不在候选列表中，尝试直接使用", city_name);
     Ok(Some(city_name))
 }
+

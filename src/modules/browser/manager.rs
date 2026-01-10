@@ -204,3 +204,14 @@ fn launch_edge_process(port: u16, url: Option<&str>) -> Result<()> {
 
     Ok(())
 }
+
+
+
+
+#[tokio::test]
+async fn test_connect() {
+    let port = 2001;
+
+    let (browser, page) = connect_to_browser_and_page(port, Some("www.bing.com"), None).await.unwrap();
+
+}

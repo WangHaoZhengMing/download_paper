@@ -22,3 +22,4 @@ async fn main() -> Result<()> {
 
     pipeline::run(app_config).await
 }
+

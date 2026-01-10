@@ -21,6 +21,7 @@ pub struct AppConfig {
 	pub tiku_target_title: String,
 	#[serde(default = "default_concurrency")]
 	pub concurrency: usize,
+	// pub catalogue_url
 }
 
 impl AppConfig {
@@ -53,7 +54,7 @@ impl Default for AppConfig {
 }
 
 fn default_start_page() -> i32 {
-	58
+	65
 }
 
 fn default_end_page() -> i32 {

@@ -1,8 +1,11 @@
+use std::fs::{ OpenOptions};
+use std::sync::Arc;
+use std::io::{ Write};
 use anyhow::Result;
 use chromiumoxide::{Browser, Page};
 use futures::stream::{self, StreamExt};
 use tokio::time::{Duration, sleep};
-use tracing::{debug, info, warn, error};
+use tracing::{debug, info, warn};
 
 use crate::config::AppConfig;
 use crate::core::models::PaperInfo;
@@ -10,21 +13,23 @@ use crate::core::types::{ProcessResult, ProcessStats};
 use crate::modules::browser::{get_or_open_page, BrowserPool, download_page};
 use crate::modules::catalogue::fetch_paper_list;
 use crate::modules::storage::persist_paper_locally;
+use crate::workflow::upload_to_xueke::save_paper;
 
 async fn process_single_paper(
     paper_info: &PaperInfo,
     browser: &Browser,
     output_dir: &str,
+    tiku_page: Page,
 ) -> Result<ProcessResult> {
     let paper_page = get_or_open_page(browser, &paper_info.url, None).await?;
 
     debug!("开始处理试卷: {}", paper_info.title);
     let result: Result<ProcessResult> = async {
-        let page_data = download_page(&paper_page).await.map_err(|e| {
+        let mut page_data = download_page(&paper_page).await.map_err(|e| {
             warn!("下载页面数据失败: {}", e);
             e
         })?;
-
+        save_paper(tiku_page.clone(), &mut page_data).await?;
         persist_paper_locally(&page_data, output_dir)?;
         info!("✅ 成功处理: {}", page_data.name);
         Ok(ProcessResult::Success)
@@ -42,7 +47,7 @@ pub async fn process_catalogue_page(
     page_number: i32,
     browser: &Browser,
 ) -> Result<Vec<PaperInfo>> {
-    let catalogue_url = format!("https://zujuan.xkw.com/czkx/shijuan/jdcs/p{}", page_number);
+    let catalogue_url = format!("https://zujuan.xkw.com/czls/shijuan/bk/p{}", page_number);
     info!("📖 正在处理目录页 {}...", page_number);
 
     let catalogue_page = get_or_open_page(browser, &catalogue_url, None).await?;
@@ -71,25 +76,37 @@ pub async fn run(app_config: AppConfig) -> Result<()> {
     let (browser, _bootstrap_page) = browser_pool
         .connect_page(Some("https://tk-lpzx.xdf.cn/#/paperEnterList"), None)
         .await?;
+    let browser = Arc::new(browser);
 
+    // This is the main handle we will reference throughout the loop
     let tiku_page = get_or_open_page(
         &browser,
         "https://tk-lpzx.xdf.cn/#/paperEnterList",
         Some("试卷录入"),
     )
     .await?;
-    // info!("{}", tiku_page.content().await?);
+
+
     let mut total = ProcessStats::default();
 
     for page_num in app_config.start_page..app_config.end_page {
+        let mut file = OpenOptions::new()
+        .create(true) // 如果文件不存在，就自动创建
+        .append(true) // 关键：开启追加模式
+        .open("other/proceed.txt")?; // 打开文件
+
+    writeln!(file, "{}", page_num)?; 
         match process_catalogue_page(page_num, &browser).await {
             Ok(papers) => {
                 if papers.is_empty() {
                     debug!("页面 {} 没有试卷，跳过", page_num);
                     continue;
                 }
+
+                // Check existence stream
                 let (stats, pending) = stream::iter(papers.into_iter())
                     .then(|mut paper| {
+                        // Capture tiku_page by reference here, clone it for the async block
                         let tiku_page = tiku_page.clone();
                         async move {
                             match paper.check_paper_existence(&tiku_page).await {
@@ -119,11 +136,19 @@ pub async fn run(app_config: AppConfig) -> Result<()> {
                     )
                     .await;
 
+                // Download stream
                 let stats_after_dl = stream::iter(pending.into_iter().map(|paper| {
-                    let browser = browser.clone();
+                    let browser = Arc::clone(&browser);
                     let output_dir = app_config.output_dir.clone();
+                    
+                    // FIX: Clone the page handle HERE.
+                    // This happens inside the map closure (synchronously), 
+                    // creating a fresh owned `page_handle` for the specific Future being created.
+                    let page_handle = tiku_page.clone();
+                    
                     async move {
-                        let res = process_single_paper(&paper, &browser, &output_dir).await;
+                        // Now we move the `page_handle` (which we just created) into the async block
+                        let res = process_single_paper(&paper, &browser, &output_dir, page_handle).await;
                         (paper.title, res)
                     }
                 }))
@@ -159,7 +184,6 @@ pub async fn run(app_config: AppConfig) -> Result<()> {
         }
 
         sleep(Duration::from_millis(app_config.delay_ms)).await;
-        info!("{}", "=".repeat(60));
     }
   
     drop(browser);
@@ -171,4 +195,3 @@ pub async fn run(app_config: AppConfig) -> Result<()> {
 
     Ok(())
 }
- 

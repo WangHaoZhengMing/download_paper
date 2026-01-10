@@ -1,0 +1,212 @@
+[
+  {
+   
+    "itemName": "全国",
+    "itemValue": "1",
+   
+  },
+  {
+   
+    "itemName": "北京市",
+    "itemValue": "11",
+   
+  },
+  {
+   
+    "itemName": "天津市",
+    "itemValue": "12",
+   
+  },
+  {
+   
+    "itemName": "河北省",
+    "itemValue": "13",
+   
+  },
+  {
+   
+    "itemName": "山西省",
+    "itemValue": "14",
+   
+  },
+  {
+   
+    "itemName": "内蒙古自治区",
+    "itemValue": "15",
+   
+  },
+  {
+   
+    "itemName": "辽宁省",
+    "itemValue": "21",
+   
+  },
+  {
+   
+    "itemName": "吉林省",
+    "itemValue": "22",
+   
+  },
+  {
+   
+    "itemName": "黑龙江省",
+    "itemValue": "23",
+   
+  },
+  {
+   
+    "itemName": "上海市",
+    "itemValue": "31",
+   
+  },
+  {
+   
+    "itemName": "江苏省",
+    "itemValue": "32",
+   
+  },
+  {
+   
+    "itemName": "浙江省",
+    "itemValue": "33",
+   
+  },
+  {
+   
+    "itemName": "安徽省",
+    "itemValue": "34",
+   
+  },
+  {
+   
+    "itemName": "福建省",
+    "itemValue": "35",
+   
+  },
+  {
+   
+    "itemName": "江西省",
+    "itemValue": "36",
+   
+  },
+  {
+   
+    "itemName": "山东省",
+    "itemValue": "37",
+   
+  },
+  {
+   
+    "itemName": "河南省",
+    "itemValue": "41",
+   
+  },
+  {
+   
+    "itemName": "湖北省",
+    "itemValue": "42",
+   
+  },
+  {
+   
+    "itemName": "湖南省",
+    "itemValue": "43",
+   
+  },
+  {
+   
+    "itemName": "广东省",
+    "itemValue": "44",
+   
+  },
+  {
+   
+    "itemName": "广西自治区",
+    "itemValue": "45",
+   
+  },
+  {
+   
+    "itemName": "海南省",
+    "itemValue": "46",
+   
+  },
+  {
+   
+    "itemName": "重庆市",
+    "itemValue": "50",
+   
+  },
+  {
+   
+    "itemName": "四川省",
+    "itemValue": "51",
+   
+  },
+  {
+   
+    "itemName": "贵州省",
+    "itemValue": "52",
+   
+  },
+  {
+   
+    "itemName": "云南省",
+    "itemValue": "53",
+   
+  },
+  {
+   
+    "itemName": "西藏自治区",
+    "itemValue": "54",
+   
+  },
+  {
+   
+    "itemName": "陕西省",
+    "itemValue": "61",
+   
+  },
+  {
+   
+    "itemName": "甘肃省",
+    "itemValue": "62",
+   
+  },
+  {
+   
+    "itemName": "青海省",
+    "itemValue": "63",
+   
+  },
+  {
+   
+    "itemName": "宁夏自治区",
+    "itemValue": "64",
+   
+  },
+  {
+   
+    "itemName": "新疆自治区",
+    "itemValue": "65",
+   
+  },
+  {
+   
+    "itemName": "台湾省",
+    "itemValue": "71",
+   
+  },
+  {
+   
+    "itemName": "香港",
+    "itemValue": "81",
+   
+  },
+  {
+   
+    "itemName": "澳门",
+    "itemValue": "82",
+   
+  }
+]
