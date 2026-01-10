@@ -54,7 +54,7 @@ impl Default for AppConfig {
 }
 
 fn default_start_page() -> i32 {
-	65
+	67
 }
 
 fn default_end_page() -> i32 {
