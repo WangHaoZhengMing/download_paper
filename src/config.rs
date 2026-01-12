@@ -54,11 +54,11 @@ impl Default for AppConfig {
 }
 
 fn default_start_page() -> i32 {
-	67
+	978
 }
 
 fn default_end_page() -> i32 {
-	466
+	1766
 }
 
 fn default_debug_port() -> u16 {

@@ -6,8 +6,8 @@ use crate::modules::ask_llm;
 pub struct MiscInfo {
     pub paper_type_name: String,
     pub parent_paper_type: String,
-    pub school_year_begin: i32,
-    pub school_year_end: i32,
+    pub school_year_begin: Option<i32>,
+    pub school_year_end: Option<i32>,
     pub paper_term: Option<String>,
     pub paper_month: Option<i32>,
 }
@@ -17,8 +17,8 @@ impl Default for MiscInfo {
         Self {
             paper_type_name: String::new(),
             parent_paper_type: String::new(),
-            school_year_begin: 0,
-            school_year_end: 0,
+            school_year_begin: Some(2024),
+            school_year_end: Some(2025),
             paper_term: Some("1".to_string()),
             paper_month: None,
         }
